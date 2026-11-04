@@ -1,0 +1,27 @@
+Factor,Group,Importance
+Depression,Younger (45-64),0.1076
+Income,Younger (45-64),0.0126
+Deaf / hearing problem,Younger (45-64),0.011
+COPD,Younger (45-64),0.0105
+Stroke,Younger (45-64),0.0062
+No exercise,Younger (45-64),0.0046
+Education,Younger (45-64),0.0042
+Diabetes,Younger (45-64),0.0015
+Age,Younger (45-64),0.0013
+Female,Younger (45-64),0.0012
+Obese,Younger (45-64),0.0012
+Heart disease,Younger (45-64),0.0011
+Current smoker,Younger (45-64),0.0003
+Depression,Older (65+),0.0801
+Income,Older (65+),0.0039
+Deaf / hearing problem,Older (65+),0.0232
+COPD,Older (65+),0.0084
+Stroke,Older (65+),0.0065
+No exercise,Older (65+),0.0027
+Education,Older (65+),0.0012
+Diabetes,Older (65+),0.0011
+Age,Older (65+),0.0165
+Female,Older (65+),0.0005
+Obese,Older (65+),0.0023
+Heart disease,Older (65+),0.0047
+Current smoker,Older (65+),0.0002

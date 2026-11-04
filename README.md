@@ -41,6 +41,7 @@ python src/download_brfss.py 2022 2023 2024
 python src/first_look.py 2023
 python src/build_table.py
 python src/regression.py
+python src/ml_model.py
 ```
 
 ## Project structure
@@ -51,6 +52,7 @@ src/
   first_look.py       counts and percentages for the memory questions
   build_table.py      clean analysis table, 2023 + 2024, people 45+ (with survey weights)
   regression.py       step 3: weighted logistic regression, younger vs older
+  ml_model.py         step 4: machine learning (logistic regression vs gradient boosting)
 notebooks/01_explore.ipynb  step 2: first charts (weighted, group totals only)
 data/                 downloaded data (not uploaded)
 tableau/              summary tables (safe to share)
@@ -76,6 +78,7 @@ High blood pressure is only asked in odd years, so it is available for 2023 only
 
 First charts: see [reports/explore_notes.md](reports/explore_notes.md).
 Statistics: see [reports/statistics_notes.md](reports/statistics_notes.md).
+Machine learning: see [reports/ml_notes.md](reports/ml_notes.md).
 
 ## Credits
 
