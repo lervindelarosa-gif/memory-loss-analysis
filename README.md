@@ -12,6 +12,8 @@ What predicts it?); every topic page has a "← Home" button. Built from the sma
 
 ## App
 
+**Live app:** [memory-loss-analysis.streamlit.app](https://memory-loss-analysis.streamlit.app/)
+
 Streamlit app with 7 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
 Risk checker). It only reads the summary tables in `tableau/`.
 
