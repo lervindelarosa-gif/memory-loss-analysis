@@ -49,6 +49,7 @@ src/
   download_brfss.py   download the national BRFSS files from the CDC
   first_look.py       counts and percentages for the memory questions
   build_table.py      clean analysis table, 2023 + 2024, people 45+ (with survey weights)
+notebooks/01_explore.ipynb  step 2: first charts (weighted, group totals only)
 data/                 downloaded data (not uploaded)
 tableau/              summary tables (safe to share)
 reports/              results and charts
@@ -70,6 +71,8 @@ The module changed in 2023, so 2023 and 2024 are combined and 2022 is kept apart
 **Analysis table (2023 + 2024):** 208,171 people aged 45+ from 37 states.
 Weighted share with memory loss getting worse: **16.2% at 45-64** and **17.2% at 65+**.
 High blood pressure is only asked in odd years, so it is available for 2023 only.
+
+First charts: see [reports/explore_notes.md](reports/explore_notes.md).
 
 ## Credits
 
