@@ -48,8 +48,16 @@ plays a role: education, income, health and lifestyle.
 - **NHANES:** the [NCHS Data User Agreement](https://www.cdc.gov/nchs/policy/data-user-agreement.html) applies:
   statistical use only, no attempt to identify anyone, no linking with identifiable data.
   It does not mention AI tools. Restricted / limited-access NHANES files are NOT used.
+- **CDC reuse policy:** most CDC data is [public domain](https://www.cdc.gov/other/agencymaterials.html);
+  credit the source and do not suggest that CDC endorses the work (see below).
+- No attempt is made to identify any person, and no linking with other data.
 - Only group totals are shared. The raw data is not in this repository (large files):
   download it with the script below.
+
+**Source:** Centers for Disease Control and Prevention (CDC), Behavioral Risk Factor Surveillance System
+Survey Data, 2023 and 2024. Atlanta, Georgia: U.S. Department of Health and Human Services, CDC.
+The data is available on the [CDC website](https://www.cdc.gov/brfss/annual_data/annual_data.htm) at no charge.
+This is a student project. It is not reviewed or endorsed by CDC, and the analysis and conclusions are my own.
 
 ## How to run
 

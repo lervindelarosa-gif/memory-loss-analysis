@@ -88,6 +88,7 @@ st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS)
                    "Group totals only.")
 st.sidebar.caption("Memory loss = \"confusion or memory loss that is happening more often or getting worse\" "
                    "in the past 12 months. Self-reported, not a diagnosis.")
+st.sidebar.caption("Source: CDC BRFSS 2023-2024, free on cdc.gov. Student project, not endorsed by CDC.")
 
 # ---- Home ----
 if page == "Home":
