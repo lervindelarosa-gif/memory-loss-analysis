@@ -10,6 +10,16 @@ Home page with KPI tiles and clickable topic buttons (Age, Income, Education, He
 What predicts it?); every topic page has a "← Home" button. Built from the small summary tables in `tableau/`
 (`python src/make_dashboard_tables.py`).
 
+## App
+
+Streamlit app with 7 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
+Risk checker). It only reads the summary tables in `tableau/`.
+
+```bash
+pip install -r requirements.txt
+streamlit run app/streamlit_app.py
+```
+
 ## Why this project
 
 Most people think memory problems only come with old age. I want to find out what else
