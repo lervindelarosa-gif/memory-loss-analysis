@@ -6,7 +6,8 @@ A data analytics final project about **memory loss in adults aged 45+**, compari
 ## Dashboard
 
 **Tableau Public:** [Is memory loss only about age?](https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home)
-(tabs: Home, Groups, Age, Income, Education, Health, Model). Built from the small summary tables in `tableau/`
+Home page with KPI tiles and clickable topic buttons (Age, Income, Education, Health,
+What predicts it?); every topic page has a "← Home" button. Built from the small summary tables in `tableau/`
 (`python src/make_dashboard_tables.py`).
 
 ## Why this project
