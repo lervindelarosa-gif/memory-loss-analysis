@@ -1,0 +1,15 @@
+group,income,people,with_memory_loss,memory_loss_pct,pct_label,people_label,with_label
+Older (65+),1 Under $15k,4543,994,20.2,20.2% memory loss,"4,543 people",994 with memory loss
+Older (65+),2 $15-25k,10308,2304,21.9,21.9% memory loss,"10,308 people","2,304 with memory loss"
+Older (65+),3 $25-35k,12672,2564,19.5,19.5% memory loss,"12,672 people","2,564 with memory loss"
+Older (65+),4 $35-50k,15638,2855,18.3,18.3% memory loss,"15,638 people","2,855 with memory loss"
+Older (65+),5 $50-100k,30782,4979,16.1,16.1% memory loss,"30,782 people","4,979 with memory loss"
+Older (65+),6 $100-200k,13377,1836,12.7,12.7% memory loss,"13,377 people","1,836 with memory loss"
+Older (65+),7 $200k+,3322,391,13.5,13.5% memory loss,"3,322 people",391 with memory loss
+Younger (45-64),1 Under $15k,5685,1935,31.4,31.4% memory loss,"5,685 people","1,935 with memory loss"
+Younger (45-64),2 $15-25k,6605,1829,27.5,27.5% memory loss,"6,605 people","1,829 with memory loss"
+Younger (45-64),3 $25-35k,7110,1594,21.7,21.7% memory loss,"7,110 people","1,594 with memory loss"
+Younger (45-64),4 $35-50k,8312,1496,17.4,17.4% memory loss,"8,312 people","1,496 with memory loss"
+Younger (45-64),5 $50-100k,22641,3297,14.9,14.9% memory loss,"22,641 people","3,297 with memory loss"
+Younger (45-64),6 $100-200k,22519,2512,11.5,11.5% memory loss,"22,519 people","2,512 with memory loss"
+Younger (45-64),7 $200k+,8588,711,8.1,8.1% memory loss,"8,588 people",711 with memory loss

@@ -3,6 +3,12 @@
 A data analytics final project about **memory loss in adults aged 45+**, comparing
 **younger people (45–64)** with **older people (65+)**.
 
+## Dashboard
+
+**Tableau Public:** [Is memory loss only about age?](https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home)
+(tabs: Home, Groups, Age, Income, Education, Health, Model). Built from the small summary tables in `tableau/`
+(`python src/make_dashboard_tables.py`).
+
 ## Why this project
 
 Most people think memory problems only come with old age. I want to find out what else
