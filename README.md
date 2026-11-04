@@ -37,7 +37,7 @@ plays a role: education, income, health and lifestyle.
 ## How to run
 
 ```bash
-python src/download_brfss.py 2023
+python src/download_brfss.py 2022 2023 2024
 python src/first_look.py 2023
 ```
 
@@ -55,7 +55,15 @@ notebooks/            exploration
 
 ## Status
 
-Just started: BRFSS 2023 downloaded and checked.
+Just started: BRFSS 2022, 2023 and 2024 downloaded and checked.
+
+| Year | Memory question | People 45+ who answered | States |
+|---|---|---|---|
+| 2022 | CIMEMLOS (old version) | 63,948 | 12 |
+| 2023 | CIMEMLO1 (new version) | 134,033 | 28 |
+| 2024 | CIMEMLO1 (new version) | 78,111 | 19 |
+
+The module changed in 2023, so 2023 and 2024 are combined and 2022 is kept apart.
 
 ## Credits
 

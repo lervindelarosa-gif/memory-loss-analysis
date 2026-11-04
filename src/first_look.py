@@ -21,7 +21,7 @@ XPT = ROOT / "data" / "raw" / "brfss" / f"LLCP{YEAR}.XPT"
 
 AGE = {1: "18-24", 2: "25-29", 3: "30-34", 4: "35-39", 5: "40-44", 6: "45-49", 7: "50-54",
        8: "55-59", 9: "60-64", 10: "65-69", 11: "70-74", 12: "75-79", 13: "80+"}
-COLS = ["_STATE", "_AGEG5YR", "DECIDE", "CIMEMLO1"]
+COLS = ["_STATE", "_AGEG5YR", "DECIDE", "CIMEMLO1", "CIMEMLOS"]  # CIMEMLOS until 2022, CIMEMLO1 from 2023
 
 parts = [chunk[[c for c in COLS if c in chunk.columns]]
          for chunk in pd.read_sas(XPT, format="xport", chunksize=100_000)]
@@ -38,5 +38,6 @@ def pct_yes(col):
 
 
 pct_yes("DECIDE")
-if "CIMEMLO1" in df:
-    pct_yes("CIMEMLO1")
+for memory_col in ("CIMEMLO1", "CIMEMLOS"):
+    if memory_col in df:
+        pct_yes(memory_col)
