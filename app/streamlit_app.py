@@ -47,10 +47,41 @@ def side_by_side(d, category, order, x_title, height=380):
     ).properties(height=height)
 
 
-# ---- Sidebar: choose a topic ----
+# ---- Look and feel: same style as the Tableau dashboard (white, grey tiles, dark buttons) ----
+st.markdown("""
+<style>
+div.stButton > button {
+    background-color: #2B2B2B; color: #FFFFFF; border: none; border-radius: 4px;
+    font-weight: 700; padding: 0.9rem 0.5rem; width: 100%;
+}
+div.stButton > button:hover { background-color: #2A5C8A; color: #FFFFFF; }
+div.stButton > button:focus:not(:active) { color: #FFFFFF; }
+.kpi { text-align: center; padding: 0.4rem 0; }
+.kpi .num { font-size: 2.3rem; font-weight: 300; color: #3A3A3A; line-height: 1.1; }
+.kpi .lbl { font-size: 0.95rem; color: #6B7280; }
+.subtitle { color: #6B7280; margin-top: -0.8rem; }
+</style>
+""", unsafe_allow_html=True)
+
+PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Risk checker"]
+if "page" not in st.session_state:
+    st.session_state.page = "Home"
+
+
+def go(target):
+    """Button callback: open another page (runs before the page is drawn again)."""
+    st.session_state.page = target
+
+
+def home_button():
+    """Title row helper: a '← Home' button at the top right of every topic page."""
+    _, right = st.columns([5, 1])
+    right.button("← Home", on_click=go, args=("Home",), key="home_btn", width="stretch")
+
+
+# ---- Sidebar: choose a topic (stays in sync with the buttons) ----
 st.sidebar.title("🧠 Memory loss in people 45+")
-page = st.sidebar.radio("Choose a topic", ["Home", "Age", "Income", "Education", "Health",
-                                           "What predicts memory loss", "Risk checker"])
+page = st.sidebar.radio("Choose a topic", PAGES, key="page")
 st.sidebar.markdown("---")
 st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS) 2023 and 2024, "
                    "Cognitive Decline module (37 US states). Percentages use the survey weights. "
@@ -61,31 +92,54 @@ st.sidebar.caption("Memory loss = \"confusion or memory loss that is happening m
 # ---- Home ----
 if page == "Home":
     st.title("Is memory loss only about age?")
-    st.write("Most people think memory problems only come with old age. This app uses a large US health "
-             f"survey of **{groups.loc['Everyone (45+)', 'people']:,} people aged 45+** to see what else plays a role.")
-    c1, c2 = st.columns(2)
-    c3, c4 = st.columns(2)
-    c1.metric("People aged 45+", f"{groups.loc['Everyone (45+)', 'people']:,}")
-    c2.metric("Report memory loss getting worse", f"{groups.loc['Everyone (45+)', 'with_memory_loss']:,}")
-    c3.metric("Younger people (45-64)", f"{groups.loc['Younger (45-64)', 'memory_loss_pct']:.1f}%",
-              help="Weighted share who report memory loss getting worse.")
-    c4.metric("Older people (65+)", f"{groups.loc['Older (65+)', 'memory_loss_pct']:.1f}%",
-              help="Weighted share who report memory loss getting worse.")
+    st.markdown('<p class="subtitle">CDC BRFSS 2023 + 2024 &nbsp;|&nbsp; people aged 45+ in 37 US states '
+                '&nbsp;|&nbsp; weighted survey results</p>', unsafe_allow_html=True)
 
-    st.subheader("Who is in the data?")
-    table = groups.reset_index()[["group", "people", "with_memory_loss", "memory_loss_pct"]].rename(columns={
-        "group": "Group", "people": "People", "with_memory_loss": "With memory loss",
-        "memory_loss_pct": "% (weighted)"})
-    st.dataframe(table, hide_index=True, column_config={
-        "People": st.column_config.NumberColumn(format="localized"),
-        "With memory loss": st.column_config.NumberColumn(format="localized"),
-        "% (weighted)": st.column_config.NumberColumn(format="%.1f%%")})
-    st.info("**Key finding:** memory loss is almost as common at 45-64 as at 65+. "
-            "For younger people, **income, depression and hearing** matter more than age.")
-    st.write("👈 Choose a topic in the menu on the left.")
+    # KPI tiles: 2 x 2, so the numbers are not cut off on small screens
+    everyone, young, old = groups.loc["Everyone (45+)"], groups.loc["Younger (45-64)"], groups.loc["Older (65+)"]
+    kpis = [(f"{everyone['people']:,}", "people aged 45+"),
+            (f"{everyone['with_memory_loss']:,}", "report memory loss getting worse"),
+            (f"{young['memory_loss_pct']:.1f}%", "of younger people (45-64)"),
+            (f"{old['memory_loss_pct']:.1f}%", "of older people (65+)")]
+    for row in (kpis[:2], kpis[2:]):
+        for col, (num, lbl) in zip(st.columns(2), row):
+            with col.container(border=True):
+                st.markdown(f'<div class="kpi"><div class="num">{num}</div><div class="lbl">{lbl}</div></div>',
+                            unsafe_allow_html=True)
+
+    left, right = st.columns([1, 1])
+    with left:
+        st.subheader("Groups")
+        table = groups.reset_index()[["group", "people", "with_memory_loss", "memory_loss_pct"]].rename(columns={
+            "group": "Group", "people": "People", "with_memory_loss": "With memory loss",
+            "memory_loss_pct": "% (weighted)"})
+        st.dataframe(table, hide_index=True, column_config={
+            "People": st.column_config.NumberColumn(format="localized"),
+            "With memory loss": st.column_config.NumberColumn(format="localized"),
+            "% (weighted)": st.column_config.NumberColumn(format="%.1f%%")})
+    with right:
+        st.subheader("Main finding")
+        low, high = by_inc[by_inc["group"] == GROUPS[0]]["memory_loss_pct"].iloc[[0, -1]]
+        st.write(f"Memory loss is almost as common at 45-64 ({young['memory_loss_pct']:.1f}%) as at 65+ "
+                 f"({old['memory_loss_pct']:.1f}%). For younger people, **money, depression and hearing** "
+                 f"matter more than age. Lowest income: **{low:.1f}%** have memory loss. Highest income: "
+                 f"**{high:.1f}%**.")
+
+    st.write("**Click a topic to explore:**")
+    topics = [("Age", "Age"), ("Income", "Income"), ("Education", "Education"), ("Health", "Health"),
+              ("What predicts it?", "What predicts memory loss")]
+    for col, (label, target) in zip(st.columns(len(topics)), topics):
+        col.button(label, on_click=go, args=(target,), key=f"btn_{target}", width="stretch")
+    st.button("Risk checker: which factors matter for a person like this?", on_click=go,
+              args=("Risk checker",), key="btn_risk", width="stretch")
+
+    st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
+               'worse"), not a diagnosis. The charts show links, not causes. Percentages use the BRFSS survey '
+               'weights. Only group totals are shown.')
 
 # ---- Age ----
 elif page == "Age":
+    home_button()
     st.header("Memory loss is almost flat from 45 to 74")
     st.write("It only goes up clearly after age 75.")
     chart = alt.Chart(by_age).mark_bar(cornerRadiusEnd=4).encode(
@@ -103,6 +157,7 @@ elif page == "Age":
 
 # ---- Income ----
 elif page == "Income":
+    home_button()
     st.header("Low income goes with much more memory loss, especially for younger people")
     d = by_inc.copy()
     d["income"] = d["income"].str[2:]
@@ -118,6 +173,7 @@ elif page == "Income":
 
 # ---- Education ----
 elif page == "Education":
+    home_button()
     st.header("Less education goes with more memory loss")
     d = by_edu.copy()
     d["education"] = d["education"].str[2:]
@@ -130,6 +186,7 @@ elif page == "Education":
 
 # ---- Health ----
 elif page == "Health":
+    home_button()
     st.header("Health problems: how common is memory loss with each one?")
     group = st.radio("Age group", GROUPS, horizontal=True)
     d = by_health[by_health["group"] == group].copy()
@@ -149,6 +206,7 @@ elif page == "Health":
 
 # ---- What predicts memory loss ----
 elif page == "What predicts memory loss":
+    home_button()
     st.header("Which factors does a machine learning model need most?")
     st.write("A gradient boosting model learned who reports memory loss from the other survey answers "
              "(208,171 people). Bigger bar = the model needs this factor more.")
@@ -168,6 +226,7 @@ elif page == "What predicts memory loss":
 
 # ---- Risk checker (explains factors, does not diagnose) ----
 else:
+    home_button()
     st.header("Which factors matter for a person like this?")
     st.warning("**This is not a diagnosis and not medical advice.** It shows what the statistics found for "
                "groups of people in the USA. These are links, not causes. Worried about memory? Talk to a doctor.")
