@@ -69,7 +69,9 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
          "Try the tests", "Expectations vs data", "Class poll", "Risk checker"]
 if "page" not in st.session_state:
-    st.session_state.page = "Home"
+    # A link like ?page=Class+poll opens that page directly (used by the QR codes on the slides)
+    start = st.query_params.get("page", "Home")
+    st.session_state.page = start if start in PAGES else "Home"
 
 
 def go(target):
