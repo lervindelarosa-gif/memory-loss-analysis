@@ -67,7 +67,7 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
-         "Try the tests", "Risk checker"]
+         "Try the tests", "Expectations vs data", "Class poll", "Risk checker"]
 if "page" not in st.session_state:
     st.session_state.page = "Home"
 
@@ -143,6 +143,11 @@ if page == "Home":
               args=("Risk checker",), key="btn_risk", width="stretch")
     c2.button("Try the NHANES-style memory tests yourself", on_click=go,
               args=("Try the tests",), key="btn_try", width="stretch")
+    c3, c4 = st.columns(2)
+    c3.button("Expectations vs data: what did you expect?", on_click=go, args=("Expectations vs data",), key="btn_expect",
+              width="stretch")
+    c4.button("Class poll: is memory loss only about age?", on_click=go, args=("Class poll",), key="btn_poll",
+              width="stretch")
 
     st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
                'worse"), not a diagnosis. The charts show links, not causes. Percentages use the BRFSS survey '
@@ -427,6 +432,123 @@ elif page == "Try the tests":
 
     st.caption("In NHANES 2011-2014, people aged 60+ did these three tests. In this project, a low test score "
                "means the bottom 25% of the combined score. See the Memory tests page.")
+
+# ---- Expectations vs data: write down what you expect, then compare with the results ----
+elif page == "Expectations vs data":
+    home_button()
+    st.header("What did you expect? Compare it with the data")
+    st.write("Four questions about the results. Choose what you expect, then click **Show the data**.")
+    ss = st.session_state
+    young_pct, old_pct = groups.loc["Younger (45-64)", "memory_loss_pct"], groups.loc["Older (65+)", "memory_loss_pct"]
+    inc_young = by_inc[by_inc["group"] == GROUPS[0]]["memory_loss_pct"]
+    low_inc, high_inc = inc_young.iloc[0], inc_young.iloc[-1]
+    nh = compare[(compare["item"] == "1 Everyone") & (compare["measure"] == NHANES_LABEL)].set_index("group")["pct"]
+    dep_or = odds[(odds["group"] == GROUPS[0]) & (odds["factor"] == "Depression")]["OR"].iloc[0]
+
+    def question(n, text, guess_widget, answer_md):
+        with st.container(border=True):
+            st.subheader(f"Question {n}")
+            st.write(text)
+            guess = guess_widget()
+            if st.button("Show the data", key=f"q{n}_show"):
+                ss[f"q{n}_open"] = True
+            if ss.get(f"q{n}_open"):
+                st.success(answer_md(guess))
+
+    question(1, "Out of 100 people aged **45-64**, how many say their memory is getting worse?",
+             lambda: st.slider("What you expect", 0, 60, 5, key="q1"),
+             lambda g: f"You expected **{g}**. The data says **{young_pct:.0f}** ({young_pct:.1f}%). "
+                       f"That is almost the same as people aged 65+ ({old_pct:.1f}%). "
+                       "So memory loss is **not only an old-age problem**.")
+
+    question(2, "Among people aged 45-64 with the **lowest income** (under \\$15k), how many out of 100 say "
+                "their memory is getting worse?",
+             lambda: st.slider("What you expect", 0, 60, 15, key="q2"),
+             lambda g: f"You expected **{g}**. The data says **{low_inc:.0f}** ({low_inc:.1f}%). With the highest "
+                       f"income (\\$200k+) it is only **{high_inc:.1f}%**, almost 4 times less.")
+
+    q3_opts = ["When people judge their own memory (BRFSS)", "When memory is tested (NHANES)", "Both the same"]
+    question(3, "When does **age** make a bigger difference?",
+             lambda: st.radio("What you expect", q3_opts, index=None, key="q3"),
+             lambda g: ("✅ As you expected. " if g == q3_opts[1] else "") +
+                       f"**When memory is tested.** Low test scores: {nh['1 Younger']:.1f}% at 60-69 vs "
+                       f"{nh['2 Older']:.1f}% at 70+. What people say: {young_pct:.1f}% at 45-64 vs "
+                       f"{old_pct:.1f}% at 65+.")
+
+    q4_opts = ["Age", "Depression", "Smoking", "Being overweight"]
+    question(4, "For people aged 45-64, which of these goes with memory loss the **most**?",
+             lambda: st.radio("What you expect", q4_opts, index=None, key="q4"),
+             lambda g: ("✅ As you expected. " if g == q4_opts[1] else "") +
+                       f"**Depression**: about **{dep_or:.1f} times the odds**, after taking income, health and "
+                       "the other factors into account. Within 45-64, age itself hardly matters, and smoking "
+                       "and being overweight showed no clear link.")
+
+    st.caption("Answers come from the BRFSS 2023-2024 and NHANES 2011-2014 results in this app. Links, not causes.")
+
+# ---- Class poll: live votes shared by everyone who opens the app ----
+elif page == "Class poll":
+    import threading
+
+    @st.cache_resource
+    def poll_store():
+        """One shared vote counter for all visitors (in memory, no names, gone when the app restarts)."""
+        return {"lock": threading.Lock(),
+                "votes": {"Start": {"Yes": 0, "No": 0}, "End": {"Yes": 0, "No": 0}}}
+
+    store = poll_store()
+    ss = st.session_state
+    home_button()
+    st.header("Class poll: is memory loss only about age?")
+    st.write("Vote once at the **start** of the talk and once at the **end**. Did anyone change their mind?")
+
+    def vote(rnd, answer):
+        if ss.get(f"voted_{rnd}"):
+            return
+        with store["lock"]:
+            store["votes"][rnd][answer] += 1
+        ss[f"voted_{rnd}"] = answer
+
+    c1, c2 = st.columns(2)
+    for col, rnd, title in [(c1, "Start", "Before the talk"), (c2, "End", "After the talk")]:
+        with col.container(border=True):
+            st.subheader(title)
+            if ss.get(f"voted_{rnd}"):
+                st.write(f"Thanks! You voted **{ss[f'voted_{rnd}']}**.")
+            else:
+                b1, b2 = st.columns(2)
+                b1.button("Yes, only age", key=f"poll_{rnd}_yes", on_click=vote, args=(rnd, "Yes"),
+                          width="stretch")
+                b2.button("No, other things too", key=f"poll_{rnd}_no", on_click=vote, args=(rnd, "No"),
+                          width="stretch")
+
+    @st.fragment(run_every=2)
+    def poll_results():
+        with store["lock"]:
+            v = {r: dict(a) for r, a in store["votes"].items()}
+        st.subheader("Live results")
+        cols = st.columns(2)
+        for col, rnd, title in [(cols[0], "Start", "Before the talk"), (cols[1], "End", "After the talk")]:
+            total = sum(v[rnd].values())
+            no_pct = round(100 * v[rnd]["No"] / total) if total else 0
+            with col.container(border=True):
+                st.markdown(f"**{title}** ({total} vote{'' if total == 1 else 's'})")
+                st.markdown(f'<div class="kpi"><div class="num">{no_pct}%</div>'
+                            '<div class="lbl">say <b>no, other things too</b></div></div>', unsafe_allow_html=True)
+                st.progress(no_pct / 100)
+                st.caption(f"Yes, only age: {v[rnd]['Yes']} · No, other things too: {v[rnd]['No']}")
+        st.caption(f"Before: {sum(v['Start'].values())} votes · After: {sum(v['End'].values())} votes. "
+                   "Updates every 2 seconds.")
+
+    poll_results()
+    with st.expander("For the presenter"):
+        st.write("Clear all votes before the talk. Votes are only counted (no names) and are lost "
+                 "when the app restarts.")
+        if st.button("Reset all votes", key="poll_reset"):
+            with store["lock"]:
+                store["votes"] = {"Start": {"Yes": 0, "No": 0}, "End": {"Yes": 0, "No": 0}}
+            for k in ["voted_Start", "voted_End"]:
+                ss.pop(k, None)
+            st.rerun()
 
 # ---- Risk checker (explains factors, does not diagnose) ----
 else:
