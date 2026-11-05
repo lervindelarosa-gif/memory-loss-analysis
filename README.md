@@ -92,6 +92,10 @@ A health survey with a medical exam. People 60+ did three memory and thinking te
 - **Animal naming:** name as many animals as possible in 1 minute (language, thinking speed)
 - **Symbol matching:** match symbols to numbers in 2 minutes (attention, speed)
 
+These are tests that doctors also use to **screen for dementia** (the word list comes from CERAD, a
+research group on Alzheimer's disease). So Part 2 brings the project closer to dementia, but a low score
+is **not** a dementia diagnosis.
+
 **Low test score** = bottom 25% (weighted) of the combined score.
 **Analysis table:** 2,934 people aged 60+ who did all the tests. Hearing was only asked in 2011–2012.
 
