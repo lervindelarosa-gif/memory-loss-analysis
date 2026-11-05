@@ -141,7 +141,7 @@ if page == "Home":
     c1, c2 = st.columns(2)
     c1.button("Risk checker: which factors matter for a person like this?", on_click=go,
               args=("Risk checker",), key="btn_risk", width="stretch")
-    c2.button("Try the tests yourself (3 short games)", on_click=go,
+    c2.button("Try the NHANES-style memory tests yourself", on_click=go,
               args=("Try the tests",), key="btn_try", width="stretch")
 
     st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
@@ -287,8 +287,8 @@ elif page == "Try the tests":
     import time
 
     home_button()
-    st.header("Try the tests yourself")
-    st.warning("**A demo to show how the tests work. Not a real test and not a diagnosis.** These are my own "
+    st.header("Try the NHANES-style memory tests")
+    st.warning("**Short versions of the 3 NHANES tests, to show how they work. Not a real test and not a diagnosis.** These are my own "
                "simple versions (own words and symbols), not the official NHANES test forms. "
                "Nothing you type is saved.")
     ss = st.session_state

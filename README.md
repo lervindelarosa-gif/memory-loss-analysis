@@ -29,7 +29,7 @@ tests it. Using both lets me check whether the answer is the same.* Built from t
 
 **Live app:** [memory-loss-analysis.streamlit.app](https://memory-loss-analysis.streamlit.app/)
 Streamlit app with 9 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
-Memory tests (NHANES), Try the tests, Risk checker). "Try the tests" has 3 short demo games (own versions
+Memory tests (NHANES), Try the tests, Risk checker). "Try the tests" has short versions of the 3 NHANES tests (own versions
 of the NHANES tests: word recall, animal naming, symbol matching; nothing is saved). It only reads the summary tables in `tableau/`.
 
 ```bash
