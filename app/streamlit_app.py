@@ -67,7 +67,7 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
-         "Risk checker"]
+         "Try the tests", "Risk checker"]
 if "page" not in st.session_state:
     st.session_state.page = "Home"
 
@@ -138,8 +138,11 @@ if page == "Home":
               ("What predicts it?", "What predicts memory loss"), ("Memory tests", "Memory tests (NHANES)")]
     for col, (label, target) in zip(st.columns(len(topics)), topics):
         col.button(label, on_click=go, args=(target,), key=f"btn_{target}", width="stretch")
-    st.button("Risk checker: which factors matter for a person like this?", on_click=go,
+    c1, c2 = st.columns(2)
+    c1.button("Risk checker: which factors matter for a person like this?", on_click=go,
               args=("Risk checker",), key="btn_risk", width="stretch")
+    c2.button("Try the tests yourself (3 short games)", on_click=go,
+              args=("Try the tests",), key="btn_try", width="stretch")
 
     st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
                'worse"), not a diagnosis. The charts show links, not causes. Percentages use the BRFSS survey '
@@ -277,6 +280,153 @@ elif page == "Memory tests (NHANES)":
                "screening tests (not a diagnosis). Different people, different years and different age groups, "
                "so compare the patterns, not the exact numbers. Lowest income = under \\$15k (BRFSS) and under "
                "\\$25k (NHANES); highest = \\$200k+ and \\$100k+.")
+
+# ---- Try the tests: own demo versions of the 3 NHANES tests (nothing is saved) ----
+elif page == "Try the tests":
+    import random
+    import time
+
+    home_button()
+    st.header("Try the tests yourself")
+    st.warning("**A demo to show how the tests work. Not a real test and not a diagnosis.** These are my own "
+               "simple versions (own words and symbols), not the official NHANES test forms. "
+               "Nothing you type is saved.")
+    ss = st.session_state
+
+    def timer_text(start_key, limit):
+        left = limit - (time.time() - ss[start_key])
+        return f"⏱️ **{max(0, int(left))} seconds left**" if left > 0 else "⏱️ **Time is up!**"
+
+    tab1, tab2, tab3 = st.tabs(["1. Word recall (memory)", "2. Animal naming (language)",
+                                "3. Symbol matching (speed)"])
+
+    # -- 1. Word recall: like the CERAD word list (learn 10 words, recall them later) --
+    with tab1:
+        WORDS = ["apple", "river", "chair", "candle", "garden", "window", "tiger", "button", "cloud", "ticket"]
+        step = ss.setdefault("wr_step", "start")
+        if step == "start":
+            st.write("You will see **10 words**. Read them, then answer two easy questions. "
+                     "After that, type all the words you remember.")
+            if st.button("Start", key="wr_start"):
+                ss.wr_step = "show"
+                st.rerun()
+        elif step == "show":
+            st.subheader("Remember these words")
+            cols = st.columns(5)
+            for i, w in enumerate(WORDS):
+                cols[i % 5].markdown(f"<div class='kpi'><div class='num' style='font-size:1.6rem'>{w}</div></div>",
+                                     unsafe_allow_html=True)
+            if st.button("I have read them", key="wr_read"):
+                ss.wr_step = "distract"
+                st.rerun()
+        elif step == "distract":
+            st.subheader("Two quick questions first")
+            a = st.number_input("What is 7 + 8?", step=1, value=None, key="wr_q1")
+            b = st.number_input("What is 20 - 6?", step=1, value=None, key="wr_q2")
+            if st.button("Next", key="wr_next", disabled=a is None or b is None):
+                ss.wr_step = "recall"
+                st.rerun()
+        elif step == "recall":
+            st.subheader("Now type the words you remember")
+            typed = st.text_area("Words (separate them with spaces or commas)", key="wr_typed")
+            if st.button("Check my answer", key="wr_check"):
+                got = {w.strip(" .,;").lower() for w in typed.replace(",", " ").split()} & set(WORDS)
+                ss.wr_score = len(got)
+                ss.wr_step = "result"
+                st.rerun()
+        else:
+            st.metric("Words remembered", f"{ss.wr_score} out of 10")
+            st.info("**The real test:** NHANES used the CERAD word list. People learn 10 words over 3 tries and "
+                    "recall them a few minutes later. It measures **memory**, which is often the first thing to "
+                    "change in Alzheimer's disease.")
+            if st.button("Try again", key="wr_again"):
+                ss.wr_step = "start"
+                st.rerun()
+
+    # -- 2. Animal naming: like the animal fluency test (as many animals as possible in 60 seconds) --
+    with tab2:
+        if "an_start" not in ss:
+            st.write("Name **as many different animals as you can in 60 seconds**. Type them with spaces or commas.")
+            if st.button("Start the 60 seconds", key="an_go"):
+                ss.an_start = time.time()
+                st.rerun()
+        elif "an_score" not in ss:
+            @st.fragment(run_every=1)
+            def an_timer():
+                st.markdown(timer_text("an_start", 60))
+            an_timer()
+            typed = st.text_area("Animals", key="an_typed", height=150)
+            if st.button("Done", key="an_done"):
+                used = time.time() - ss.an_start
+                ss.an_score = len({w.strip(" .,;").lower() for w in typed.replace(",", " ").split() if w.strip(" .,;")})
+                ss.an_late = used > 65
+                st.rerun()
+        else:
+            st.metric("Different words typed", ss.an_score)
+            if ss.an_late:
+                st.caption("You went over 60 seconds, so this is just for fun.")
+            st.info("**The real test:** in NHANES a tester says \"name as many animals as you can\" and counts the "
+                    "different animals in 1 minute. It measures **language and thinking speed**. "
+                    "(This demo counts every different word, it does not check that they are animals.)")
+            if st.button("Try again", key="an_again"):
+                for k in ["an_start", "an_score", "an_late", "an_typed"]:
+                    ss.pop(k, None)
+                st.rerun()
+
+    # -- 3. Symbol matching: like the DSST (match numbers to symbols as fast as possible) --
+    with tab3:
+        KEY = {1: "▲", 2: "●", 3: "■", 4: "★", 5: "◆", 6: "✚", 7: "♥", 8: "▼", 9: "◯"}
+        LIMIT = 60
+        st.write("Each number has its own symbol. Click the right symbol for each number, "
+                 f"as many as you can in **{LIMIT} seconds**.")
+        st.markdown(" &nbsp; &nbsp; ".join(f"**{n}** = {s}" for n, s in KEY.items()))
+        if "sy_start" not in ss:
+            if st.button("Start", key="sy_go"):
+                ss.sy_start, ss.sy_right, ss.sy_wrong = time.time(), 0, 0
+                ss.sy_num = random.randint(1, 9)
+                st.rerun()
+        else:
+            over = time.time() - ss.sy_start > LIMIT
+
+            @st.fragment(run_every=1)
+            def sy_timer():
+                st.markdown(timer_text("sy_start", LIMIT))
+                if time.time() - ss.sy_start > LIMIT and not ss.get("sy_done"):
+                    ss.sy_done = True  # time is up: redraw the whole page once to show the score
+                    st.rerun(scope="app")
+            if not over:
+                sy_timer()
+
+            if not over:
+                st.markdown(f"<div class='kpi'><div class='num'>{ss.sy_num}</div>"
+                            "<div class='lbl'>Which symbol?</div></div>", unsafe_allow_html=True)
+
+                def answer(sym):
+                    if time.time() - ss.sy_start > LIMIT:
+                        return
+                    if KEY[ss.sy_num] == sym:
+                        ss.sy_right += 1
+                    else:
+                        ss.sy_wrong += 1
+                    ss.sy_num = random.randint(1, 9)
+
+                for col, sym in zip(st.columns(9), KEY.values()):
+                    col.button(sym, key=f"sy_{sym}", on_click=answer, args=(sym,), width="stretch")
+                st.caption(f"Right so far: {ss.sy_right}")
+            else:
+                c1, c2 = st.columns(2)
+                c1.metric("Right", ss.sy_right)
+                c2.metric("Wrong", ss.sy_wrong)
+                st.info("**The real test:** NHANES used the Digit Symbol Substitution Test (DSST). People copy "
+                        "symbols under numbers for 2 minutes. It measures **attention and speed**, which slow "
+                        "down with age and with problems like stroke.")
+                if st.button("Try again", key="sy_again"):
+                    for k in ["sy_start", "sy_right", "sy_wrong", "sy_num", "sy_done"]:
+                        ss.pop(k, None)
+                    st.rerun()
+
+    st.caption("In NHANES 2011-2014, people aged 60+ did these three tests. In this project, a low test score "
+               "means the bottom 25% of the combined score. See the Memory tests page.")
 
 # ---- Risk checker (explains factors, does not diagnose) ----
 else:
