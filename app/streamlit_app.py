@@ -32,6 +32,9 @@ by_health = load("dash_health.csv")                    # factor x age group
 model = load("dash_model.csv")                         # permutation importance from the ML model
 odds = load("odds_ratios.csv")                         # weighted logistic regression, models A and B
 odds = odds[odds["model"] == "B"]                      # model B: with depression
+compare = load("dash_compare.csv")                     # BRFSS (people say) vs NHANES (people tested)
+BRFSS_LABEL, NHANES_LABEL = "BRFSS: say memory is worse", "NHANES: low memory test score"
+DATASET_COLORS = alt.Scale(domain=[BRFSS_LABEL, NHANES_LABEL], range=["#4E79A7", "#F28E2B"])
 
 
 def side_by_side(d, category, order, x_title, height=380):
@@ -63,7 +66,8 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 </style>
 """, unsafe_allow_html=True)
 
-PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Risk checker"]
+PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
+         "Risk checker"]
 if "page" not in st.session_state:
     st.session_state.page = "Home"
 
@@ -88,7 +92,10 @@ st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS)
                    "Group totals only.")
 st.sidebar.caption("Memory loss = \"confusion or memory loss that is happening more often or getting worse\" "
                    "in the past 12 months. Self-reported, not a diagnosis.")
-st.sidebar.caption("Source: CDC BRFSS 2023-2024, free on cdc.gov. Student project, not endorsed by CDC.")
+st.sidebar.caption("Memory tests page: CDC NHANES 2011-2014, people 60+ who did memory tests "
+                   "(dementia screening tests, not a diagnosis).")
+st.sidebar.caption("Source: CDC BRFSS 2023-2024 and NHANES 2011-2014, free on cdc.gov. "
+                   "Student project, not endorsed by CDC.")
 
 # ---- Home ----
 if page == "Home":
@@ -128,7 +135,7 @@ if page == "Home":
 
     st.write("**Click a topic to explore:**")
     topics = [("Age", "Age"), ("Income", "Income"), ("Education", "Education"), ("Health", "Health"),
-              ("What predicts it?", "What predicts memory loss")]
+              ("What predicts it?", "What predicts memory loss"), ("Memory tests", "Memory tests (NHANES)")]
     for col, (label, target) in zip(st.columns(len(topics)), topics):
         col.button(label, on_click=go, args=(target,), key=f"btn_{target}", width="stretch")
     st.button("Risk checker: which factors matter for a person like this?", on_click=go,
@@ -224,6 +231,52 @@ elif page == "What predicts memory loss":
         st.success("For older people, **age** is one of the top 3 factors, after depression and hearing.")
     st.caption("Model score (ROC AUC): 0.71 overall, 0.74 for younger and 0.68 for older people. "
                "Memory loss here is self-reported, so it is hard to predict. For learning, not for diagnosing.")
+
+# ---- Memory tests: BRFSS (people say) vs NHANES (people tested) ----
+elif page == "Memory tests (NHANES)":
+    home_button()
+    st.header("BRFSS asks people about their memory. NHANES tests it.")
+    st.write("Using both lets me check whether the answer is the same.")
+
+    nh = compare[(compare["item"] == "1 Everyone") & (compare["measure"] == NHANES_LABEL)].set_index("group")["pct"]
+    c1, c2, c3 = st.columns(3)
+    with c1.container(border=True):
+        st.markdown("**BRFSS 2023-24** (people say)<br>Phone survey, 208,171 people aged 45+.<br>"
+                    "\"Is your memory getting worse?\" Yes or no.", unsafe_allow_html=True)
+    with c2.container(border=True):
+        st.markdown("**NHANES 2011-14** (people tested)<br>Health exam, 2,934 people aged 60+.<br>"
+                    "Word list, animal naming, symbol matching.", unsafe_allow_html=True)
+    with c3.container(border=True):
+        st.markdown(f'<div class="kpi"><div class="num">{nh["1 Younger"]:.1f}% vs {nh["2 Older"]:.1f}%</div>'
+                    '<div class="lbl">low test score at 60-69 vs 70+</div></div>', unsafe_allow_html=True)
+
+    d = compare.copy()
+    d["item"] = d["item"].str[2:]
+    order = d["item"].drop_duplicates().tolist()
+    cols = st.columns(2)
+    for col, (grp, title) in zip(cols, [("1 Younger", "Younger (BRFSS 45-64, NHANES 60-69)"),
+                                        ("2 Older", "Older (BRFSS 65+, NHANES 70+)")]):
+        g = d[d["group"] == grp]
+        bars = alt.Chart(g).mark_bar(cornerRadiusEnd=4).encode(
+            x=alt.X("pct:Q", title="%", scale=alt.Scale(domain=[0, 70])),
+            y=alt.Y("item:N", sort=order, title=None, axis=alt.Axis(labelLimit=200)),
+            yOffset=alt.YOffset("measure:N", sort=[BRFSS_LABEL, NHANES_LABEL]),
+            color=alt.Color("measure:N", title=None, scale=DATASET_COLORS, legend=alt.Legend(orient="bottom", direction="vertical", labelLimit=400)),
+            tooltip=[alt.Tooltip("item:N", title="Group"), alt.Tooltip("measure:N", title="Dataset"),
+                     alt.Tooltip("pct:Q", title="%", format=".1f"),
+                     alt.Tooltip("people:Q", title="People", format=",")],
+        ).properties(height=460, title=title)
+        labels = bars.mark_text(align="left", dx=3, color=MUTED, fontSize=11).encode(
+            text=alt.Text("pct:Q", format=".1f"))
+        col.altair_chart(bars + labels, width="stretch")
+
+    st.success("**Both agree:** low income, depression, stroke and no exercise go with worse memory. "
+               "**The twist:** age matters much more when memory is tested (NHANES) than when people judge "
+               "their own memory (BRFSS).")
+    st.caption("Blue = BRFSS: people say their memory is getting worse. Orange = NHANES: bottom 25% on dementia "
+               "screening tests (not a diagnosis). Different people, different years and different age groups, "
+               "so compare the patterns, not the exact numbers. Lowest income = under \\$15k (BRFSS) and under "
+               "\\$25k (NHANES); highest = \\$200k+ and \\$100k+.")
 
 # ---- Risk checker (explains factors, does not diagnose) ----
 else:
