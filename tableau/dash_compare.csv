@@ -1,0 +1,37 @@
+item,group,measure,pct,people,pct_label
+1 Everyone,2 Older,BRFSS: say memory is worse,17.2,115070,17.2%
+1 Everyone,1 Younger,BRFSS: say memory is worse,16.2,93101,16.2%
+1 Everyone,2 Older,NHANES: low memory test score,38.0,1346,38.0%
+1 Everyone,1 Younger,NHANES: low memory test score,14.7,1588,14.7%
+2 Lowest income,2 Older,BRFSS: say memory is worse,20.2,4543,20.2%
+2 Lowest income,1 Younger,BRFSS: say memory is worse,31.4,5685,31.4%
+2 Lowest income,2 Older,NHANES: low memory test score,50.2,479,50.2%
+2 Lowest income,1 Younger,NHANES: low memory test score,30.8,484,30.8%
+3 Highest income,2 Older,BRFSS: say memory is worse,13.5,3322,13.5%
+3 Highest income,1 Younger,BRFSS: say memory is worse,8.1,8588,8.1%
+3 Highest income,2 Older,NHANES: low memory test score,21.9,148,21.9%
+3 Highest income,1 Younger,NHANES: low memory test score,5.6,248,5.6%
+4 Less than high school,2 Older,BRFSS: say memory is worse,21.9,6087,21.9%
+4 Less than high school,1 Younger,BRFSS: say memory is worse,23.3,5619,23.3%
+4 Less than high school,2 Older,NHANES: low memory test score,64.0,349,64.0%
+4 Less than high school,1 Younger,NHANES: low memory test score,41.9,397,41.9%
+5 College graduate,2 Older,BRFSS: say memory is worse,14.8,47686,14.8%
+5 College graduate,1 Younger,BRFSS: say memory is worse,11.6,40723,11.6%
+5 College graduate,2 Older,NHANES: low memory test score,24.5,318,24.5%
+5 College graduate,1 Younger,NHANES: low memory test score,4.9,356,4.9%
+6 Depression,2 Older,BRFSS: say memory is worse,35.5,18528,35.5%
+6 Depression,1 Younger,BRFSS: say memory is worse,37.8,22150,37.8%
+6 Depression,2 Older,NHANES: low memory test score,55.2,87,55.2%
+6 Depression,1 Younger,NHANES: low memory test score,29.8,176,29.8%
+7 Hearing problem,2 Older,BRFSS: say memory is worse,28.7,19647,28.7%
+7 Hearing problem,1 Younger,BRFSS: say memory is worse,37.0,6230,37.0%
+7 Hearing problem,2 Older,NHANES: low memory test score,49.4,132,49.4%
+7 Hearing problem,1 Younger,NHANES: low memory test score,23.0,87,23.0%
+8 Stroke,2 Older,BRFSS: say memory is worse,26.7,8863,26.7%
+8 Stroke,1 Younger,BRFSS: say memory is worse,37.6,3680,37.6%
+8 Stroke,2 Older,NHANES: low memory test score,57.0,129,57.0%
+8 Stroke,1 Younger,NHANES: low memory test score,29.6,74,29.6%
+9 No exercise,2 Older,BRFSS: say memory is worse,21.2,33779,21.2%
+9 No exercise,1 Younger,BRFSS: say memory is worse,24.1,23402,24.1%
+9 No exercise,2 Older,NHANES: low memory test score,44.8,829,44.8%
+9 No exercise,1 Younger,NHANES: low memory test score,19.8,885,19.8%

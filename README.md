@@ -22,8 +22,10 @@ so they are analysed **separately** and only the results are compared.
 
 **Tableau Public:** [Is memory loss only about age?](https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home)
 Home page with KPI tiles; every page has the same button bar at the top (Home, Age, Income, Education,
-Health, What predicts it?). Built from the small summary tables in `tableau/`
-(`python src/make_dashboard_tables.py`).
+Health, What predicts it?, Memory tests) and fits on one screen (1000 x 600). The **Memory tests** page puts
+BRFSS (people say) and NHANES (people tested) side by side: *BRFSS asks people about their memory. NHANES
+tests it. Using both lets me check whether the answer is the same.* Built from the small summary tables in
+`tableau/` (`python src/make_dashboard_tables.py`; `dash_compare.csv` needs `src/nhanes_analysis.py` first).
 
 **Live app:** [memory-loss-analysis.streamlit.app](https://memory-loss-analysis.streamlit.app/)
 Streamlit app with 7 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,

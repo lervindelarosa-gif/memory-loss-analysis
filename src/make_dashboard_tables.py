@@ -61,3 +61,32 @@ for name, t in tables.items():
         t["with_label"] = t["with_memory_loss"].map("{:,} with memory loss".format)
     t.to_csv(OUT / name, index=False)
     print(f"{name:20s} {len(t):3d} rows")
+
+# ---- BRFSS vs NHANES: same groups side by side (needs src/nhanes_analysis.py first) ----
+# BRFSS = people SAY their memory is getting worse; NHANES = people SCORE LOW on memory tests
+nh = pd.read_csv(OUT / "nhanes_groups.csv")
+inc, edu = tables["dash_income.csv"], tables["dash_education.csv"]
+ITEMS = [  # (label, BRFSS rows, NHANES category)
+    ("1 Everyone", groups[groups["group"] != "Everyone (45+)"], "Everyone"),
+    ("2 Lowest income", inc[inc["income"] == "1 Under $15k"], "Under $25k"),
+    ("3 Highest income", inc[inc["income"] == "7 $200k+"], "$100k+"),
+    ("4 Less than high school", edu[edu["education"] == "1 Less than high school"], "Less than high school"),
+    ("5 College graduate", edu[edu["education"] == "4 College graduate"], "College graduate"),
+    ("6 Depression", health[health["factor"] == "Depression"], "Depression"),
+    ("7 Hearing problem", health[health["factor"] == "Deaf / hearing problem"], "Hearing problem"),
+    ("8 Stroke", health[health["factor"] == "Stroke"], "Stroke"),
+    ("9 No exercise", health[health["factor"] == "No exercise"], "No exercise"),
+]
+rows = []
+for label, b, cat in ITEMS:
+    for _, r in b.iterrows():
+        rows.append({"item": label, "group": "1 Younger" if "Younger" in r["group"] else "2 Older",
+                     "measure": "BRFSS: say memory is worse", "pct": r["memory_loss_pct"], "people": r["people"]})
+    for _, r in nh[nh["category"] == cat].iterrows():
+        rows.append({"item": label, "group": "1 Younger" if "Younger" in r["group"] else "2 Older",
+                     "measure": "NHANES: low memory test score", "pct": r["low_test_score_pct"],
+                     "people": r["people"]})
+compare = pd.DataFrame(rows)
+compare["pct_label"] = compare["pct"].map("{:.1f}%".format)
+compare.to_csv(OUT / "dash_compare.csv", index=False)
+print(f"{'dash_compare.csv':20s} {len(compare):3d} rows")
