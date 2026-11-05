@@ -1,0 +1,42 @@
+topic,group,category,people,low_test_score_pct,memory_complaint_pct
+Overall,Older (70+),Everyone,1346,38.0,15.8
+Overall,Younger (60-69),Everyone,1588,14.7,10.4
+Age,Older (70+),70-74,552,24.7,13.1
+Age,Older (70+),75-79,312,37.9,11.8
+Age,Older (70+),80+,482,55.3,22.3
+Age,Younger (60-69),60-64,916,12.6,9.7
+Age,Younger (60-69),65-69,672,17.6,11.3
+Income,Older (70+),Under $25k,479,50.2,17.5
+Income,Older (70+),$25-55k,399,39.6,17.5
+Income,Older (70+),$55-100k,216,29.6,9.9
+Income,Older (70+),$100k+,148,21.9,13.1
+Income,Younger (60-69),Under $25k,484,30.8,17.7
+Income,Younger (60-69),$25-55k,422,17.6,10.6
+Income,Younger (60-69),$55-100k,301,7.7,9.1
+Income,Younger (60-69),$100k+,248,5.6,5.6
+Education,Older (70+),Less than high school,349,64.0,19.6
+Education,Older (70+),High school,320,40.9,15.1
+Education,Older (70+),Some college,357,30.8,14.9
+Education,Older (70+),College graduate,318,24.5,14.8
+Education,Younger (60-69),Less than high school,397,41.9,18.0
+Education,Younger (60-69),High school,366,21.4,9.8
+Education,Younger (60-69),Some college,468,9.6,9.6
+Education,Younger (60-69),College graduate,356,4.9,8.4
+Health,Older (70+),Depression,87,55.2,43.0
+Health,Younger (60-69),Depression,176,29.8,40.4
+Health,Older (70+),Hearing problem,132,49.4,18.2
+Health,Younger (60-69),Hearing problem,87,23.0,18.8
+Health,Older (70+),Stroke,129,57.0,20.5
+Health,Younger (60-69),Stroke,74,29.6,23.1
+Health,Older (70+),COPD,176,33.3,13.4
+Health,Younger (60-69),COPD,150,22.2,20.3
+Health,Older (70+),Heart disease,175,40.5,18.2
+Health,Younger (60-69),Heart disease,91,21.8,15.1
+Health,Older (70+),Diabetes,314,46.7,20.5
+Health,Younger (60-69),Diabetes,374,24.2,13.5
+Health,Older (70+),High blood pressure,902,41.1,15.7
+Health,Younger (60-69),High blood pressure,927,17.1,13.5
+Health,Older (70+),No exercise,829,44.8,18.2
+Health,Younger (60-69),No exercise,885,19.8,13.5
+Health,Older (70+),Current smoker,92,50.9,16.1
+Health,Younger (60-69),Current smoker,280,18.2,13.0

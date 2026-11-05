@@ -1,19 +1,31 @@
 # Is memory loss only about age?
 
-A data analytics final project about **memory loss in adults aged 45+**, comparing
-**younger people (45–64)** with **older people (65+)**.
+*What people say about their memory, and how they score on memory tests (CDC BRFSS and NHANES)*
 
-## Dashboard
+A data analytics final project in two parts, using two different CDC datasets:
+
+| | **Part 1: BRFSS** | **Part 2: NHANES** |
+|---|---|---|
+| Memory measured by | People **say** their memory is getting worse | People **score low** on memory tests |
+| Years | 2023 + 2024 | 2011–2012 + 2013–2014 |
+| People | 208,171 aged 45+ | 2,934 aged 60+ |
+| Younger vs older | 45–64 vs 65+ | 60–69 vs 70+ |
+| Younger group | **16.2%** memory loss | **14.7%** low test score |
+| Older group | **17.2%** memory loss | **38.0%** low test score |
+
+Neither dataset gives a dementia diagnosis. The two datasets are about different people,
+so they are analysed **separately** and only the results are compared.
+
+**Short answer: no, memory loss is not only about age.** See [Comparison](#comparison-part-1-vs-part-2).
+
+## Dashboard and app (Part 1: BRFSS)
 
 **Tableau Public:** [Is memory loss only about age?](https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home)
-Home page with KPI tiles and clickable topic buttons (Age, Income, Education, Health,
-What predicts it?); every topic page has a "← Home" button. Built from the small summary tables in `tableau/`
+Home page with KPI tiles; every page has the same button bar at the top (Home, Age, Income, Education,
+Health, What predicts it?). Built from the small summary tables in `tableau/`
 (`python src/make_dashboard_tables.py`).
 
-## App
-
 **Live app:** [memory-loss-analysis.streamlit.app](https://memory-loss-analysis.streamlit.app/)
-
 Streamlit app with 7 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
 Risk checker). It only reads the summary tables in `tableau/`.
 
@@ -30,66 +42,17 @@ plays a role: education, income, health and lifestyle.
 ## The question
 
 - Is memory loss only about age?
-- Which factors matter most for people aged 45–64?
-- Are they the same factors as for people aged 65+?
+- Which factors matter most for younger adults?
+- Are they the same factors as for older adults?
+- Do we get the same answer when people **judge their own memory** (BRFSS) and when memory is **tested** (NHANES)?
 
-## Data
+---
 
-| Source | What it is | Ages |
-|---|---|---|
-| [BRFSS](https://www.cdc.gov/brfss/) (CDC), national files | Phone survey, more than 400,000 adults per year | 18+ |
-| – Cognitive Decline module | "Confusion or memory loss that is happening more often or getting worse" (only some states) | 45+ |
-| [NHANES](https://wwwn.cdc.gov/nchs/nhanes/) (CDC), public-use files | Health exam survey; memory tests in 2011–2014 | tests: 60+ |
+## Part 1: BRFSS (self-reported memory loss)
 
-**Important:** these surveys measure **self-reported memory problems**, not a dementia diagnosis.
-
-### Data terms (checked on 4 November 2026)
-
-- **BRFSS national files:** no data use agreement on the [download page](https://www.cdc.gov/brfss/annual_data/annual_2023.html).
-  State BRFSS files are NOT used (they have their own agreements).
-- **NHANES:** the [NCHS Data User Agreement](https://www.cdc.gov/nchs/policy/data-user-agreement.html) applies:
-  statistical use only, no attempt to identify anyone, no linking with identifiable data.
-  It does not mention AI tools. Restricted / limited-access NHANES files are NOT used.
-- **CDC reuse policy:** most CDC data is [public domain](https://www.cdc.gov/other/agencymaterials.html);
-  credit the source and do not suggest that CDC endorses the work (see below).
-- No attempt is made to identify any person, and no linking with other data.
-- Only group totals are shared. The raw data is not in this repository (large files):
-  download it with the script below.
-
-**Source:** Centers for Disease Control and Prevention (CDC), Behavioral Risk Factor Surveillance System
-Survey Data, 2023 and 2024. Atlanta, Georgia: U.S. Department of Health and Human Services, CDC.
-The data is available on the [CDC website](https://www.cdc.gov/brfss/annual_data/annual_data.htm) at no charge.
-This is a student project. It is not reviewed or endorsed by CDC, and the analysis and conclusions are my own.
-
-## How to run
-
-```bash
-python src/download_brfss.py 2022 2023 2024
-python src/first_look.py 2023
-python src/build_table.py
-python src/regression.py
-python src/ml_model.py
-```
-
-## Project structure
-
-```
-src/
-  download_brfss.py   download the national BRFSS files from the CDC
-  first_look.py       counts and percentages for the memory questions
-  build_table.py      clean analysis table, 2023 + 2024, people 45+ (with survey weights)
-  regression.py       step 3: weighted logistic regression, younger vs older
-  ml_model.py         step 4: machine learning (logistic regression vs gradient boosting)
-notebooks/01_explore.ipynb  step 2: first charts (weighted, group totals only)
-data/                 downloaded data (not uploaded)
-tableau/              summary tables (safe to share)
-reports/              results and charts
-notebooks/            exploration
-```
-
-## Status
-
-Just started: BRFSS 2022, 2023 and 2024 downloaded and checked.
+**Data:** [BRFSS](https://www.cdc.gov/brfss/) (CDC), national files, 2023 and 2024. A phone survey of more
+than 400,000 adults per year. The Cognitive Decline module asks people 45+ about "confusion or memory loss
+that is happening more often or getting worse" (only some states).
 
 | Year | Memory question | People 45+ who answered | States |
 |---|---|---|---|
@@ -98,16 +61,116 @@ Just started: BRFSS 2022, 2023 and 2024 downloaded and checked.
 | 2024 | CIMEMLO1 (new version) | 78,111 | 19 |
 
 The module changed in 2023, so 2023 and 2024 are combined and 2022 is kept apart.
-
 **Analysis table (2023 + 2024):** 208,171 people aged 45+ from 37 states.
-Weighted share with memory loss getting worse: **16.2% at 45-64** and **17.2% at 65+**.
 High blood pressure is only asked in odd years, so it is available for 2023 only.
 
-First charts: see [reports/explore_notes.md](reports/explore_notes.md).
-Statistics: see [reports/statistics_notes.md](reports/statistics_notes.md).
-Machine learning: see [reports/ml_notes.md](reports/ml_notes.md).
+**Main findings**
+- Memory loss is almost as common at 45–64 (16.2%) as at 65+ (17.2%).
+- Low income matters most for younger people: 31.4% of the lowest income group vs 8.1% of the highest.
+- Depression and hearing problems are strongly linked in both groups.
+
+**Run it**
+```bash
+python src/download_brfss.py 2022 2023 2024
+python src/first_look.py 2023
+python src/build_table.py
+python src/regression.py
+python src/ml_model.py
+python src/make_dashboard_tables.py
+```
+
+Reports: [explore_notes.md](reports/explore_notes.md) · [statistics_notes.md](reports/statistics_notes.md) ·
+[regression.md](reports/regression.md) · [ml_notes.md](reports/ml_notes.md)
+
+---
+
+## Part 2: NHANES (memory test scores)
+
+**Data:** [NHANES](https://wwwn.cdc.gov/nchs/nhanes/) (CDC), public-use files, 2011–2012 and 2013–2014.
+A health survey with a medical exam. People 60+ did three memory and thinking tests:
+- **Word list:** learn 10 words, then recall them later (memory)
+- **Animal naming:** name as many animals as possible in 1 minute (language, thinking speed)
+- **Symbol matching:** match symbols to numbers in 2 minutes (attention, speed)
+
+**Low test score** = bottom 25% (weighted) of the combined score.
+**Analysis table:** 2,934 people aged 60+ who did all the tests. Hearing was only asked in 2011–2012.
+
+**Main findings**
+- Low test scores are much more common at 70+ (38.0%) than at 60–69 (14.7%), and 55% at 80+.
+- Low income, depression and no exercise are linked in both groups, after age is taken into account.
+- Education is very strongly linked, partly because the tests reward reading and speed.
+
+**Run it**
+```bash
+python src/download_nhanes.py
+python src/build_nhanes.py
+python src/nhanes_analysis.py
+```
+
+Report: [nhanes_results.md](reports/nhanes_results.md)
+
+---
+
+## Comparison: Part 1 vs Part 2
+
+| Factor | Part 1: BRFSS (say) | Part 2: NHANES (tested) | Agree? |
+|---|---|---|---|
+| Low income | Strong link, mostly in younger people | Link in both groups | Yes |
+| Depression | Very strong | Clear | Yes |
+| No exercise | Small link | Small link | Yes |
+| Stroke | Both groups | Older group | Yes |
+| Age | Small effect | **Strong effect** | No |
+| Education | Small effect | **Very strong effect** | No |
+| Hearing | Strong link | Not clear (small sample) | No |
+
+**In short:** it is not only about age in either dataset, but age matters more when memory is tested.
+Full comparison: [reports/brfss_vs_nhanes.md](reports/brfss_vs_nhanes.md).
+
+---
+
+## Data terms (checked on 4 November 2026)
+
+- **BRFSS national files:** no data use agreement on the [download page](https://www.cdc.gov/brfss/annual_data/annual_2023.html).
+  State BRFSS files are NOT used (they have their own agreements).
+- **NHANES:** the [NCHS Data User Agreement](https://www.cdc.gov/nchs/policy/data-user-agreement.html) applies:
+  statistical use only, no attempt to identify anyone, no linking with identifiable data.
+  It does not mention AI tools. Restricted / limited-access NHANES files are NOT used.
+- **CDC reuse policy:** most CDC data is [public domain](https://www.cdc.gov/other/agencymaterials.html);
+  credit the source and do not suggest that CDC endorses the work.
+- Only group totals are shared (groups with fewer than 50 people are hidden). The raw data is not in this
+  repository: download it with the scripts above.
+
+## Project structure
+
+```
+src/
+  Part 1: BRFSS
+    download_brfss.py       download the national BRFSS files
+    first_look.py           counts and percentages for the memory questions
+    build_table.py          clean table, 2023 + 2024, people 45+ (with survey weights)
+    regression.py           weighted logistic regression, 45-64 vs 65+
+    ml_model.py             machine learning (logistic regression vs gradient boosting)
+    make_dashboard_tables.py  summary tables for Tableau and the app
+  Part 2: NHANES
+    download_nhanes.py      download the NHANES 2011-2014 files
+    build_nhanes.py         clean table, people 60+ with test scores (with survey weights)
+    nhanes_analysis.py      percentages and weighted logistic regression, 60-69 vs 70+
+app/                  Streamlit app (Part 1)
+tableau/              summary tables, safe to share (dash_*.csv = BRFSS, nhanes_*.csv = NHANES)
+reports/              results and charts
+notebooks/            exploration
+data/                 downloaded data (not uploaded)
+```
+
+(The `src/` files are all in one folder; the Part 1 / Part 2 split above is just for reading.)
 
 ## Credits
 
-Centers for Disease Control and Prevention (CDC). Behavioral Risk Factor Surveillance System Survey Data.
-National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data.
+Centers for Disease Control and Prevention (CDC), Behavioral Risk Factor Surveillance System Survey Data,
+2023 and 2024. Atlanta, Georgia: U.S. Department of Health and Human Services, CDC.
+
+National Center for Health Statistics (NCHS), National Health and Nutrition Examination Survey Data,
+2011-2012 and 2013-2014. Hyattsville, MD: U.S. Department of Health and Human Services, CDC.
+
+The data is available on the [CDC website](https://www.cdc.gov/) at no charge.
+This is a student project. It is not reviewed or endorsed by CDC, and the analysis and conclusions are my own.
