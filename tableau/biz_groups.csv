@@ -1,0 +1,13 @@
+group,people_in_survey,est_adults,memory_loss_pct,est_with_memory_loss,share_of_all_cases_pct
+Everyone 45+,208171,71993000,16.6,11928000,100.0
+Everyone 65+ (age only),115070,31988000,17.2,5486000,46.0
+Everyone 45-64,93101,40005000,16.1,6442000,54.0
+"45-64, low income (under $25k)",12290,5028000,29.7,1495000,12.5
+"45-64, depression",22150,8589000,37.1,3184000,26.7
+"45-64, hearing problem",6230,2612000,37.1,968000,8.1
+"45-64, stroke",3680,1575000,36.5,575000,4.8
+"45-64, any of: low income, depression, hearing",32564,13128000,30.5,4008000,33.6
+"65+, low income (under $25k)",14851,4504000,21.4,965000,8.1
+"65+, depression",18528,4851000,35.0,1697000,14.2
+"65+, hearing problem",19647,5168000,28.3,1461000,12.3
+"65+, stroke",8863,2510000,26.6,667000,5.6

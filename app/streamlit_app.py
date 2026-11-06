@@ -8,6 +8,7 @@ Run locally:  streamlit run app/streamlit_app.py
 from pathlib import Path
 
 import altair as alt
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -33,6 +34,8 @@ model = load("dash_model.csv")                         # permutation importance 
 odds = load("odds_ratios.csv")                         # weighted logistic regression, models A and B
 odds = odds[odds["model"] == "B"]                      # model B: with depression
 compare = load("dash_compare.csv")                     # BRFSS (people say) vs NHANES (people tested)
+biz_groups = load("biz_groups.csv")                    # outreach scenario: size of each group
+biz_gains = load("biz_gains.csv")                      # outreach scenario: cases reached per % contacted (test set)
 BRFSS_LABEL, NHANES_LABEL = "BRFSS: say memory is worse", "NHANES: low memory test score"
 DATASET_COLORS = alt.Scale(domain=[BRFSS_LABEL, NHANES_LABEL], range=["#4E79A7", "#F28E2B"])
 
@@ -67,7 +70,7 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
-         "Try the tests", "Expectations vs data", "Class poll", "Risk checker"]
+         "Try the tests", "Expectations vs data", "Class poll", "Outreach planner", "Risk checker"]
 if "page" not in st.session_state:
     # A link like ?page=Class+poll opens that page directly (used by the QR codes on the slides)
     start = st.query_params.get("page", "Home")
@@ -150,6 +153,8 @@ if page == "Home":
               width="stretch")
     c4.button("Class poll: is memory loss only about age?", on_click=go, args=("Class poll",), key="btn_poll",
               width="stretch")
+    st.button("Outreach planner: who should a health team reach first?", on_click=go, args=("Outreach planner",),
+              key="btn_outreach", width="stretch")
 
     st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
                'worse"), not a diagnosis. The charts show links, not causes. Percentages use the BRFSS survey '
@@ -551,6 +556,76 @@ elif page == "Class poll":
             for k in ["voted_Start", "voted_End"]:
                 ss.pop(k, None)
             st.rerun()
+
+# ---- Outreach planner: an example business scenario ----
+elif page == "Outreach planner":
+    home_button()
+    st.header("We can't contact everyone. Who should we reach first?")
+    st.warning("**An example scenario, not a real client.** For outreach only, never for pricing or refusing cover. "
+               "Not a diagnosis. The costs below are your own assumptions, not results from the data.")
+
+    at20 = biz_gains[biz_gains["pct_contacted"] == 20].iloc[0]
+    st.subheader("If we contact 20% of people, how many people with memory loss do we reach?")
+    c1, c2, c3 = st.columns(3)
+    for col, num, lbl in [(c1, at20["pct_cases_model"], "ranked by the model"),
+                          (c2, at20["pct_cases_oldest_first"], "oldest people first"),
+                          (c3, at20["pct_cases_random"], "picked at random")]:
+        with col.container(border=True):
+            st.markdown(f'<div class="kpi"><div class="num">{num:.1f}%</div><div class="lbl">{lbl}</div></div>',
+                        unsafe_allow_html=True)
+
+    METHODS = {"pct_cases_model": "Ranked by the model", "pct_cases_oldest_first": "Oldest first",
+               "pct_cases_random": "Random"}
+    long = biz_gains.rename(columns=METHODS).melt("pct_contacted", list(METHODS.values()), "Method", "Reached")
+    gain_chart = alt.Chart(long).mark_line(point=True).encode(
+        x=alt.X("pct_contacted:Q", title="% of people contacted"),
+        y=alt.Y("Reached:Q", title="% of people with memory loss reached"),
+        color=alt.Color("Method:N", title=None, sort=list(METHODS.values()), legend=alt.Legend(orient="bottom"),
+                        scale=alt.Scale(domain=list(METHODS.values()), range=[OLD, YOUNG, MUTED])),
+        tooltip=[alt.Tooltip("pct_contacted:Q", title="% contacted"), "Method:N",
+                 alt.Tooltip("Reached:Q", title="% reached", format=".1f")],
+    ).properties(height=340)
+    st.altair_chart(gain_chart, width="stretch")
+    st.caption("Tested on 52,043 people the model did not train on. Model score (ROC AUC): 0.71, fair.")
+
+    st.subheader("Plan your budget")
+    a, b, c = st.columns(3)
+    members = a.number_input("People you could contact", 1000, 10_000_000, 100_000, step=1000)
+    budget = b.number_input("Budget ($)", 0, 100_000_000, 50_000, step=1000)
+    cost = c.number_input("Cost per contact ($)", 0.5, 1000.0, 5.0, step=0.5)
+    contacted = min(int(budget / cost), int(members))
+    share = 100 * contacted / members
+    base = biz_groups.loc[biz_groups["group"] == "Everyone 45+", "memory_loss_pct"].iloc[0] / 100
+    all_cases = members * base
+    xs = np.r_[0, biz_gains["pct_contacted"]]
+    plan = []
+    for col_name, label in METHODS.items():
+        reached = all_cases * np.interp(share, xs, np.r_[0, biz_gains[col_name]]) / 100
+        plan.append({"Method": label, "People with memory loss reached": int(round(reached)),
+                     "Cost per person reached ($)": round(contacted * cost / reached, 2) if reached else None})
+    plan = pd.DataFrame(plan)
+    extra = plan.iloc[0, 1] - plan.iloc[1, 1]
+    st.markdown(f"Your budget contacts **{contacted:,} people** ({share:.0f}%). Ranked by the model, that reaches "
+                f"**{extra:,} more** people with memory loss than going oldest first.")
+    st.dataframe(plan, hide_index=True)
+    st.caption(f"Assumes {base:.1%} of your people report memory loss, as in the survey (adults aged 45+). "
+               "\"Reached\" means contacted, not helped: a pilot would be needed to measure real results.")
+
+    st.subheader("How big is each group?")
+    table = biz_groups.rename(columns={"group": "Group", "est_adults": "Estimated adults",
+                                       "memory_loss_pct": "% with memory loss",
+                                       "est_with_memory_loss": "Estimated with memory loss",
+                                       "share_of_all_cases_pct": "% of all cases"})
+    st.dataframe(table.drop(columns="people_in_survey"), hide_index=True, column_config={
+        "Estimated adults": st.column_config.NumberColumn(format="localized"),
+        "Estimated with memory loss": st.column_config.NumberColumn(format="localized"),
+        "% with memory loss": st.column_config.NumberColumn(format="%.1f%%"),
+        "% of all cases": st.column_config.NumberColumn(format="%.1f%%")})
+    st.caption("Rough estimates for one average year in the 37 surveyed states; groups overlap. These use a small "
+               "weighting correction, so some numbers differ slightly from other pages.")
+    st.info("**Limits.** The model finds people who report memory loss now; it does not predict who will get it. It "
+            "uses survey answers such as depression and hearing, which a real organisation may not have, so its "
+            "results could be weaker. Links, not causes.")
 
 # ---- Risk checker (explains factors, does not diagnose) ----
 else:

@@ -24,6 +24,8 @@ A public health team or health insurer deciding **which groups to reach first**.
 aged 45–64 with low income, depression or hearing problems. The results compare groups and show links, not
 causes, so they should not be used to diagnose or judge one person.
 
+**Example scenario (not a real client), for outreach only, never for pricing or refusing cover:** contacting the 20% of people the model ranks highest reaches **44.8%** of those reporting memory loss. Going oldest first reaches **22.2%**, and random 20%. Tested on 52,043 people the model did not train on. Details: [reports/business_results.md](reports/business_results.md). The app's **Outreach planner** page has a budget calculator (your own cost assumptions).
+
 ## How it was built
 
 ```mermaid
@@ -43,8 +45,8 @@ tests it. Using both lets me check whether the answer is the same.* Built from t
 `tableau/` (`python src/make_dashboard_tables.py`; `dash_compare.csv` needs `src/nhanes_analysis.py` first).
 
 **Live app:** [memory-loss-analysis.streamlit.app](https://memory-loss-analysis.streamlit.app/)
-Streamlit app with 11 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
-Memory tests (NHANES), Try the tests, Expectations vs data, Class poll, Risk checker). "Try the tests" has short versions of the 3 NHANES tests (own versions
+Streamlit app with 12 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
+Memory tests (NHANES), Try the tests, Expectations vs data, Class poll, Outreach planner, Risk checker). "Try the tests" has short versions of the 3 NHANES tests (own versions
 of the NHANES tests: word recall, animal naming, symbol matching; nothing is saved). "Expectations vs data": choose what you expect, then see the real result. "Class poll": live yes/no vote at the start and end of the talk (only counts, no names, kept in memory). It only reads the summary tables in `tableau/`.
 
 ```bash
@@ -95,6 +97,7 @@ python src/build_table.py
 python src/regression.py
 python src/ml_model.py
 python src/make_dashboard_tables.py
+python src/business_analysis.py
 ```
 
 Reports: [explore_notes.md](reports/explore_notes.md) · [statistics_notes.md](reports/statistics_notes.md) ·
