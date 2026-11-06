@@ -18,6 +18,21 @@ so they are analysed **separately** and only the results are compared.
 
 **Short answer: no, memory loss is not only about age.** See [Comparison](#comparison-part-1-vs-part-2).
 
+## Who could use this?
+
+A public health team or health insurer deciding **which groups to reach first**. The data points to people
+aged 45–64 with low income, depression or hearing problems. The results compare groups and show links, not
+causes, so they should not be used to diagnose or judge one person.
+
+## How it was built
+
+```mermaid
+flowchart LR
+    A["1. Collect<br/>Raw CDC files<br/>BRFSS and NHANES"] --> B["2. Clean<br/>Python and pandas<br/>survey weights"]
+    B --> C["3. Analyse<br/>Logistic regression<br/>gradient boosting"]
+    C --> D["4. Share<br/>Tableau, Streamlit<br/>and GitHub"]
+```
+
 ## Dashboard and app (Part 1: BRFSS)
 
 **Tableau Public:** [Is memory loss only about age?](https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home)
