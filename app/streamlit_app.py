@@ -21,8 +21,14 @@ st.set_page_config(page_title="Is memory loss only about age?", page_icon="🧠"
 
 
 @st.cache_data
+def read_table(path, modified):
+    """`modified` is part of the cache key, so a changed file is read again."""
+    return pd.read_csv(path)
+
+
 def load(name):
-    return pd.read_csv(DATA / name)
+    path = DATA / name
+    return read_table(path, path.stat().st_mtime)
 
 
 groups = load("dash_groups.csv").set_index("group")   # people and weighted % per age group
