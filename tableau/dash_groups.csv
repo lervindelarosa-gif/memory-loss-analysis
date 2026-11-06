@@ -1,4 +1,4 @@
 group,people,with_memory_loss,memory_loss_pct,pct_label,people_label,with_label
 Older (65+),115070,19937,17.2,17.2% memory loss,"115,070 people","19,937 with memory loss"
-Younger (45-64),93101,15250,16.2,16.2% memory loss,"93,101 people","15,250 with memory loss"
-Everyone (45+),208171,35187,16.7,16.7% memory loss,"208,171 people","35,187 with memory loss"
+Younger (45-64),93101,15250,16.1,16.1% memory loss,"93,101 people","15,250 with memory loss"
+Everyone (45+),208171,35187,16.6,16.6% memory loss,"208,171 people","35,187 with memory loss"

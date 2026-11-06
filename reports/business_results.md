@@ -2,14 +2,6 @@
 
 An example scenario, not a real client. For outreach only, never for pricing or refusing cover.
 
-## Weight check
-
-| Group           |   Old weights |   Corrected weights |
-|:----------------|--------------:|--------------------:|
-| Younger (45-64) |          16.2 |                16.1 |
-| Older (65+)     |          17.2 |                17.2 |
-| Everyone (45+)  |          16.7 |                16.6 |
-
 ## Group sizes (one average year, 37 states, rounded, rough)
 
 | group                                          |   people_in_survey |   est_adults |   memory_loss_pct |   est_with_memory_loss |   share_of_all_cases_pct |

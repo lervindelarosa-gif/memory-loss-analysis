@@ -3,7 +3,8 @@
 One row per person aged 45+ who answered the memory question (Cognitive Decline
 module, only asked in some states). Both years use the same new question (CIMEMLO1).
 
-Survey weights: _LLCPWT divided by the number of years, as CDC advises when years are combined.
+Survey weights: _LLCPWT divided by the number of years EACH STATE is in the module (1 or 2),
+because many states asked the question in only one of the two years.
 Design variables (_STSTR, _PSU) are kept for correct standard errors later.
 
 Usage:  python src/build_table.py
@@ -46,7 +47,7 @@ df = pd.DataFrame({
     "state": raw["_STATE"].astype(int),
     "strata": raw["_STSTR"],
     "psu": raw["_PSU"],
-    "weight": raw["_LLCPWT"] / len(YEARS),
+    "weight": raw["_LLCPWT"] / raw.groupby("_STATE")["year"].transform("nunique"),
     "age": raw["_AGE80"],  # top-coded at 80
     "age_group": raw["_AGEG5YR"].map({6: "45-49", 7: "50-54", 8: "55-59", 9: "60-64",
                                       10: "65-69", 11: "70-74", 12: "75-79", 13: "80+"}),

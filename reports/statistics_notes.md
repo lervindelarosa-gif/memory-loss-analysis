@@ -10,11 +10,11 @@ with complete answers. Weighted logistic regression: all factors at the same tim
 | Factor | Younger (45-64) | Older (65+) | Different for younger? |
 |---|---|---|---|
 | **Lowest income** (under $15k vs $200k+) | **2.4×** | 1.2× (not proven) | **Yes** (p < 0.001) |
-| **Depression** | **4.3×** | 3.2× | **Yes** (p < 0.001) |
-| **Deaf / serious hearing problem** | **2.5×** | 1.9× | **Yes** (p = 0.009) |
-| **Stroke** | 1.9× | 1.5× | **Yes** (p = 0.005) |
-| **COPD** (lung disease) | 1.6× | 1.6× | Yes, small (p = 0.009) |
-| **Heart disease** | 1.5× | 1.3× | Yes (p = 0.023) |
+| **Depression** | **4.1×** | 3.1× | **Yes** (p < 0.001) |
+| **Deaf / serious hearing problem** | **2.5×** | 1.9× | **Yes** (p = 0.003) |
+| **Stroke** | 1.8× | 1.5× | **Yes** (p = 0.013) |
+| **COPD** (lung disease) | 1.6× | 1.6× | Yes, small (p = 0.013) |
+| **Heart disease** | 1.5× | 1.3× | Yes (p = 0.026) |
 | **No exercise** | 1.4× | 1.2× | **Yes** (p < 0.001) |
 | Diabetes | 1.1× | 1.1× | Not proven |
 | **Age** (per 10 years) | **1.0× (no effect)** | 1.2× | |

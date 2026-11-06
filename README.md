@@ -10,7 +10,7 @@ A data analytics final project in two parts, using two different CDC datasets:
 | Years | 2023 + 2024 | 2011–2012 + 2013–2014 |
 | People | 208,171 aged 45+ | 2,934 aged 60+ |
 | Younger vs older | 45–64 vs 65+ | 60–69 vs 70+ |
-| Younger group | **16.2%** memory loss | **14.7%** low test score |
+| Younger group | **16.1%** memory loss | **14.7%** low test score |
 | Older group | **17.2%** memory loss | **38.0%** low test score |
 
 Neither dataset gives a dementia diagnosis. The two datasets are about different people,
@@ -85,8 +85,8 @@ The module changed in 2023, so 2023 and 2024 are combined and 2022 is kept apart
 High blood pressure is only asked in odd years, so it is available for 2023 only.
 
 **Main findings**
-- Memory loss is almost as common at 45–64 (16.2%) as at 65+ (17.2%).
-- Low income matters most for younger people: 31.4% of the lowest income group vs 8.1% of the highest.
+- Memory loss is almost as common at 45–64 (16.1%) as at 65+ (17.2%).
+- Low income matters most for younger people: 32.0% of the lowest income group vs 8.2% of the highest.
 - Depression and hearing problems are strongly linked in both groups.
 
 **Run it**

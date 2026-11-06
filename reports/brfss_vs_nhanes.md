@@ -7,7 +7,7 @@ Two CDC datasets, two ways to measure memory:
 | What it measures | People **say** their memory is getting worse | People **score low** on memory and thinking tests |
 | People | 208,171 aged 45+ | 2,934 aged 60+ |
 | Younger vs older | 45-64 vs 65+ | 60-69 vs 70+ |
-| Younger group | 16.2% memory loss | 14.7% low test score |
+| Younger group | 16.1% memory loss | 14.7% low test score |
 | Older group | 17.2% memory loss | 38.0% low test score |
 
 Low test score = bottom 25% of people aged 60+. It is **not** a dementia diagnosis.

@@ -6,8 +6,7 @@ An example scenario, not a real client. For outreach only, never for pricing or 
 2. Targeting: on a test set the model never saw, how much reported memory loss do we reach if we contact
    the people the model ranks highest, compared with oldest-first and with picking at random?
 
-Weights: a state in the module for one year keeps its full weight, a state in both years is divided by 2.
-So the estimates describe one average year in these 37 states. They are rough: not all states asked the question.
+The weights give one average year in these 37 states. Estimates are rough: not all states asked the question.
 The model finds people who report memory loss NOW (same interview). It does not predict the future.
 
 Usage:  python src/business_analysis.py   (run src/build_table.py first)
@@ -26,19 +25,9 @@ SEED = 42
 MIN_GROUP = 50
 df = pd.read_csv(ROOT / "data" / "processed" / "brfss_2023_2024.csv")
 
-# ---- Weights per state: build_table.py divided every weight by 2, so undo that, then divide by the state's years ----
-years = df.groupby("state")["year"].transform("nunique")
-df["pop_weight"] = df["weight"] * 2 / years
-
-
-def rate(d, w):
+def rate(d, w="weight"):
     return 100 * (d["memory_loss"] * d[w]).sum() / d[w].sum()
 
-
-# ---- Does the correction change the headline numbers? ----
-check = pd.DataFrame([{"Group": name, "Old weights": round(rate(g, "weight"), 1), "Corrected weights": round(rate(g, "pop_weight"), 1)}
-                      for name, g in [("Younger (45-64)", df[df["age_band"] == "45-64"]), ("Older (65+)", df[df["age_band"] == "65+"]),
-                                      ("Everyone (45+)", df)]])
 
 # ---- 1. Groups ----
 young = df["age_band"] == "45-64"
@@ -57,14 +46,14 @@ SEGMENTS = {
     "65+, hearing problem": ~young & (df["deaf"] == 1),
     "65+, stroke": ~young & (df["stroke"] == 1),
 }
-all_cases = (df["memory_loss"] * df["pop_weight"]).sum()
+all_cases = (df["memory_loss"] * df["weight"]).sum()
 rows = []
 for name, mask in SEGMENTS.items():
     g = df[mask]
     if len(g) < MIN_GROUP:
         continue
-    adults = g["pop_weight"].sum()
-    cases = (g["memory_loss"] * g["pop_weight"]).sum()
+    adults = g["weight"].sum()
+    cases = (g["memory_loss"] * g["weight"]).sum()
     rows.append({"group": name, "people_in_survey": len(g), "est_adults": int(round(adults, -3)),
                  "memory_loss_pct": round(100 * cases / adults, 1), "est_with_memory_loss": int(round(cases, -3)),
                  "share_of_all_cases_pct": round(100 * cases / all_cases, 1)})
@@ -89,8 +78,8 @@ STEPS = list(range(5, 101, 5))
 def gains(d, by):
     """Weighted share of all cases reached when contacting the top p% of adults, ranked by `by`."""
     d = d.sort_values(by, ascending=False)
-    w = d["pop_weight"].to_numpy()
-    c = (d["memory_loss"] * d["pop_weight"]).to_numpy()
+    w = d["weight"].to_numpy()
+    c = (d["memory_loss"] * d["weight"]).to_numpy()
     reached, found = np.cumsum(w) / w.sum(), np.cumsum(c) / c.sum()
     return np.interp(np.array(STEPS) / 100, reached, found) * 100
 
@@ -114,7 +103,6 @@ auc = roc_auc_score(test["memory_loss"], test["score"])
 top = gain.iloc[i20]
 lines = ["# Outreach scenario: who to reach first (BRFSS 2023 + 2024)", "",
          "An example scenario, not a real client. For outreach only, never for pricing or refusing cover.", "",
-         "## Weight check", "", check.to_markdown(index=False), "",
          "## Group sizes (one average year, 37 states, rounded, rough)", "", groups.to_markdown(index=False), "",
          f"## Targeting on the test set ({len(test):,} people, ROC AUC {auc:.3f})", "",
          gain[gain["pct_contacted"].isin([5, 10, 20, 30, 50])].to_markdown(index=False), "",

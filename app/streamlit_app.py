@@ -621,8 +621,7 @@ elif page == "Outreach planner":
         "Estimated with memory loss": st.column_config.NumberColumn(format="localized"),
         "% with memory loss": st.column_config.NumberColumn(format="%.1f%%"),
         "% of all cases": st.column_config.NumberColumn(format="%.1f%%")})
-    st.caption("Rough estimates for one average year in the 37 surveyed states; groups overlap. These use a small "
-               "weighting correction, so some numbers differ slightly from other pages.")
+    st.caption("Rough estimates for one average year in the 37 surveyed states; groups overlap.")
     st.info("**Limits.** The model finds people who report memory loss now; it does not predict who will get it. It "
             "uses survey answers such as depression and hearing, which a real organisation may not have, so its "
             "results could be weaker. Links, not causes.")
