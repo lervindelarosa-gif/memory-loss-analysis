@@ -45,9 +45,9 @@ tests it. Using both lets me check whether the answer is the same.* Built from t
 `tableau/` (`python src/make_dashboard_tables.py`; `dash_compare.csv` needs `src/nhanes_analysis.py` first).
 
 **Live app:** [memory-loss-analysis.streamlit.app](https://memory-loss-analysis.streamlit.app/)
-Streamlit app with 12 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
-Memory tests (NHANES), Try the tests, Expectations vs data, Class poll, Outreach planner, Risk checker). "Try the tests" has short versions of the 3 NHANES tests (own versions
-of the NHANES tests: word recall, animal naming, symbol matching; nothing is saved). "Expectations vs data": choose what you expect, then see the real result. "Class poll": live yes/no vote at the start and end of the talk (only counts, no names, kept in memory). It only reads the summary tables in `tableau/`.
+Streamlit app with 11 pages (Home KPIs, Age, Income, Education, Health, What predicts memory loss,
+Memory tests (NHANES), Try the tests, Expectations vs data, Outreach planner, Risk checker). "Try the tests" has short versions of the 3 NHANES tests (own versions
+of the NHANES tests: word recall, animal naming, symbol matching; nothing is saved). "Expectations vs data": choose what you expect, then see the real result. It only reads the summary tables in `tableau/`.
 
 ```bash
 pip install -r requirements.txt

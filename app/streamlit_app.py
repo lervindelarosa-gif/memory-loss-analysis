@@ -76,9 +76,9 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
-         "Try the tests", "Expectations vs data", "Class poll", "Outreach planner", "Risk checker"]
+         "Try the tests", "Expectations vs data", "Outreach planner", "Risk checker"]
 if "page" not in st.session_state:
-    # A link like ?page=Class+poll opens that page directly (used by the QR codes on the slides)
+    # A link like ?page=Try+the+tests opens that page directly (used by the QR codes on the slides)
     start = st.query_params.get("page", "Home")
     st.session_state.page = start if start in PAGES else "Home"
 
@@ -157,9 +157,7 @@ if page == "Home":
     c3, c4 = st.columns(2)
     c3.button("Expectations vs data: what did you expect?", on_click=go, args=("Expectations vs data",), key="btn_expect",
               width="stretch")
-    c4.button("Class poll: is memory loss only about age?", on_click=go, args=("Class poll",), key="btn_poll",
-              width="stretch")
-    st.button("Outreach planner: who should a health team reach first?", on_click=go, args=("Outreach planner",),
+    c4.button("Outreach planner: who should a health team reach first?", on_click=go, args=("Outreach planner",),
               key="btn_outreach", width="stretch")
 
     st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
@@ -497,71 +495,6 @@ elif page == "Expectations vs data":
                        "and being overweight showed no clear link.")
 
     st.caption("Answers come from the BRFSS 2023-2024 and NHANES 2011-2014 results in this app. Links, not causes.")
-
-# ---- Class poll: live votes shared by everyone who opens the app ----
-elif page == "Class poll":
-    import threading
-
-    @st.cache_resource
-    def poll_store():
-        """One shared vote counter for all visitors (in memory, no names, gone when the app restarts)."""
-        return {"lock": threading.Lock(),
-                "votes": {"Start": {"Yes": 0, "No": 0}, "End": {"Yes": 0, "No": 0}}}
-
-    store = poll_store()
-    ss = st.session_state
-    home_button()
-    st.header("Class poll: is memory loss only about age?")
-    st.write("Vote once at the **start** of the talk and once at the **end**. Did anyone change their mind?")
-
-    def vote(rnd, answer):
-        if ss.get(f"voted_{rnd}"):
-            return
-        with store["lock"]:
-            store["votes"][rnd][answer] += 1
-        ss[f"voted_{rnd}"] = answer
-
-    c1, c2 = st.columns(2)
-    for col, rnd, title in [(c1, "Start", "Before the talk"), (c2, "End", "After the talk")]:
-        with col.container(border=True):
-            st.subheader(title)
-            if ss.get(f"voted_{rnd}"):
-                st.write(f"Thanks! You voted **{ss[f'voted_{rnd}']}**.")
-            else:
-                b1, b2 = st.columns(2)
-                b1.button("Yes, only age", key=f"poll_{rnd}_yes", on_click=vote, args=(rnd, "Yes"),
-                          width="stretch")
-                b2.button("No, other things too", key=f"poll_{rnd}_no", on_click=vote, args=(rnd, "No"),
-                          width="stretch")
-
-    @st.fragment(run_every=2)
-    def poll_results():
-        with store["lock"]:
-            v = {r: dict(a) for r, a in store["votes"].items()}
-        st.subheader("Live results")
-        cols = st.columns(2)
-        for col, rnd, title in [(cols[0], "Start", "Before the talk"), (cols[1], "End", "After the talk")]:
-            total = sum(v[rnd].values())
-            no_pct = round(100 * v[rnd]["No"] / total) if total else 0
-            with col.container(border=True):
-                st.markdown(f"**{title}** ({total} vote{'' if total == 1 else 's'})")
-                st.markdown(f'<div class="kpi"><div class="num">{no_pct}%</div>'
-                            '<div class="lbl">say <b>no, other things too</b></div></div>', unsafe_allow_html=True)
-                st.progress(no_pct / 100)
-                st.caption(f"Yes, only age: {v[rnd]['Yes']} · No, other things too: {v[rnd]['No']}")
-        st.caption(f"Before: {sum(v['Start'].values())} votes · After: {sum(v['End'].values())} votes. "
-                   "Updates every 2 seconds.")
-
-    poll_results()
-    with st.expander("For the presenter"):
-        st.write("Clear all votes before the talk. Votes are only counted (no names) and are lost "
-                 "when the app restarts.")
-        if st.button("Reset all votes", key="poll_reset"):
-            with store["lock"]:
-                store["votes"] = {"Start": {"Yes": 0, "No": 0}, "End": {"Yes": 0, "No": 0}}
-            for k in ["voted_Start", "voted_End"]:
-                ss.pop(k, None)
-            st.rerun()
 
 # ---- Outreach planner: an example business scenario ----
 elif page == "Outreach planner":
