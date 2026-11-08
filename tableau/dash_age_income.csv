@@ -1,0 +1,57 @@
+age_group,income,people,with_memory_loss,memory_loss_pct,pct_label,people_label,with_label
+45-49,1 Under $15k,959,346,33.0,33.0% memory loss,959 people,346 with memory loss
+45-49,2 $15-25k,1109,288,26.9,26.9% memory loss,"1,109 people",288 with memory loss
+45-49,3 $25-35k,1300,278,20.7,20.7% memory loss,"1,300 people",278 with memory loss
+45-49,4 $35-50k,1626,303,15.5,15.5% memory loss,"1,626 people",303 with memory loss
+45-49,5 $50-100k,4522,613,14.8,14.8% memory loss,"4,522 people",613 with memory loss
+45-49,6 $100-200k,5354,561,10.1,10.1% memory loss,"5,354 people",561 with memory loss
+45-49,7 $200k+,2147,169,7.6,7.6% memory loss,"2,147 people",169 with memory loss
+50-54,1 Under $15k,1252,477,36.4,36.4% memory loss,"1,252 people",477 with memory loss
+50-54,2 $15-25k,1326,371,31.0,31.0% memory loss,"1,326 people",371 with memory loss
+50-54,3 $25-35k,1493,367,25.6,25.6% memory loss,"1,493 people",367 with memory loss
+50-54,4 $35-50k,1793,317,17.0,17.0% memory loss,"1,793 people",317 with memory loss
+50-54,5 $50-100k,5079,756,15.7,15.7% memory loss,"5,079 people",756 with memory loss
+50-54,6 $100-200k,5759,695,12.3,12.3% memory loss,"5,759 people",695 with memory loss
+50-54,7 $200k+,2407,220,9.1,9.1% memory loss,"2,407 people",220 with memory loss
+55-59,1 Under $15k,1540,532,31.6,31.6% memory loss,"1,540 people",532 with memory loss
+55-59,2 $15-25k,1627,469,28.1,28.1% memory loss,"1,627 people",469 with memory loss
+55-59,3 $25-35k,1782,416,22.2,22.2% memory loss,"1,782 people",416 with memory loss
+55-59,4 $35-50k,1990,355,18.9,18.9% memory loss,"1,990 people",355 with memory loss
+55-59,5 $50-100k,5529,836,15.9,15.9% memory loss,"5,529 people",836 with memory loss
+55-59,6 $100-200k,5759,639,11.7,11.7% memory loss,"5,759 people",639 with memory loss
+55-59,7 $200k+,2204,181,8.4,8.4% memory loss,"2,204 people",181 with memory loss
+60-64,1 Under $15k,1934,580,28.7,28.7% memory loss,"1,934 people",580 with memory loss
+60-64,2 $15-25k,2543,701,26.5,26.5% memory loss,"2,543 people",701 with memory loss
+60-64,3 $25-35k,2535,533,18.7,18.7% memory loss,"2,535 people",533 with memory loss
+60-64,4 $35-50k,2903,521,17.6,17.6% memory loss,"2,903 people",521 with memory loss
+60-64,5 $50-100k,7511,1092,14.4,14.4% memory loss,"7,511 people","1,092 with memory loss"
+60-64,6 $100-200k,5647,617,11.5,11.5% memory loss,"5,647 people",617 with memory loss
+60-64,7 $200k+,1830,141,7.4,7.4% memory loss,"1,830 people",141 with memory loss
+65-69,1 Under $15k,1622,368,21.3,21.3% memory loss,"1,622 people",368 with memory loss
+65-69,2 $15-25k,2930,658,19.5,19.5% memory loss,"2,930 people",658 with memory loss
+65-69,3 $25-35k,3411,656,19.4,19.4% memory loss,"3,411 people",656 with memory loss
+65-69,4 $35-50k,4014,645,17.0,17.0% memory loss,"4,014 people",645 with memory loss
+65-69,5 $50-100k,9101,1256,14.4,14.4% memory loss,"9,101 people","1,256 with memory loss"
+65-69,6 $100-200k,4707,528,10.8,10.8% memory loss,"4,707 people",528 with memory loss
+65-69,7 $200k+,1333,116,9.2,9.2% memory loss,"1,333 people",116 with memory loss
+70-74,1 Under $15k,1262,274,24.7,24.7% memory loss,"1,262 people",274 with memory loss
+70-74,2 $15-25k,2591,571,22.7,22.7% memory loss,"2,591 people",571 with memory loss
+70-74,3 $25-35k,3242,630,19.6,19.6% memory loss,"3,242 people",630 with memory loss
+70-74,4 $35-50k,4152,699,15.0,15.0% memory loss,"4,152 people",699 with memory loss
+70-74,5 $50-100k,8857,1299,15.3,15.3% memory loss,"8,857 people","1,299 with memory loss"
+70-74,6 $100-200k,3862,457,11.5,11.5% memory loss,"3,862 people",457 with memory loss
+70-74,7 $200k+,898,98,13.0,13.0% memory loss,898 people,98 with memory loss
+75-79,1 Under $15k,805,169,17.2,17.2% memory loss,805 people,169 with memory loss
+75-79,2 $15-25k,2047,469,23.2,23.2% memory loss,"2,047 people",469 with memory loss
+75-79,3 $25-35k,2550,505,18.9,18.9% memory loss,"2,550 people",505 with memory loss
+75-79,4 $35-50k,3471,659,18.3,18.3% memory loss,"3,471 people",659 with memory loss
+75-79,5 $50-100k,6838,1208,16.6,16.6% memory loss,"6,838 people","1,208 with memory loss"
+75-79,6 $100-200k,2747,422,15.1,15.1% memory loss,"2,747 people",422 with memory loss
+75-79,7 $200k+,604,80,12.6,12.6% memory loss,604 people,80 with memory loss
+80+,1 Under $15k,854,183,15.0,15.0% memory loss,854 people,183 with memory loss
+80+,2 $15-25k,2740,606,22.8,22.8% memory loss,"2,740 people",606 with memory loss
+80+,3 $25-35k,3469,773,19.7,19.7% memory loss,"3,469 people",773 with memory loss
+80+,4 $35-50k,4001,852,21.8,21.8% memory loss,"4,001 people",852 with memory loss
+80+,5 $50-100k,5986,1216,19.5,19.5% memory loss,"5,986 people","1,216 with memory loss"
+80+,6 $100-200k,2061,429,19.4,19.4% memory loss,"2,061 people",429 with memory loss
+80+,7 $200k+,487,97,30.9,30.9% memory loss,487 people,97 with memory loss
