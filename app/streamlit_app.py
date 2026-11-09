@@ -11,8 +11,9 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
-DATA = Path(__file__).resolve().parent.parent / "tableau"
+DATA =Path(__file__).resolve().parent.parent / "tableau"
 YOUNG, OLD, MUTED = "#2A5C8A", "#B4532A", "#6B7280"
 GROUPS = ["Younger (45-64)", "Older (65+)"]
 GROUP_COLORS = alt.Scale(domain=GROUPS, range=[YOUNG, OLD])
@@ -95,8 +96,10 @@ def home_button():
 
 
 # ---- Sidebar: choose a topic (stays in sync with the buttons) ----
-st.sidebar.title("🧠 Memory loss in people 45+")
-page = st.sidebar.radio("Choose a topic", PAGES, key="page")
+with st.sidebar:  # the moving brain from the first slide (decoration only)
+    components.html((Path(__file__).parent / "brain.html").read_text(encoding="utf-8"), height=190)
+st.sidebar.title("Memory loss in people 45+")
+page =st.sidebar.radio("Choose a topic", PAGES, key="page")
 st.sidebar.markdown("---")
 st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS) 2023 and 2024, "
                    "Cognitive Decline module (37 US states). Percentages use the survey weights. "
