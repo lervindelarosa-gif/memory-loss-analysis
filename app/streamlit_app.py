@@ -75,8 +75,8 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 </style>
 """, unsafe_allow_html=True)
 
-PAGES = ["Home", "Age", "Income", "Education", "Health", "What predicts memory loss", "Memory tests (NHANES)",
-         "Try the tests", "Expectations vs data", "Outreach planner", "Risk checker"]
+# Charts by age, income, education and health now live in the Tableau dashboard; the app keeps the interactive tools
+PAGES = ["Home", "Try the tests", "Expectations vs data", "Outreach planner", "Risk checker"]
 if "page" not in st.session_state:
     # A link like ?page=Try+the+tests opens that page directly (used by the QR codes on the slides)
     start = st.query_params.get("page", "Home")
@@ -103,7 +103,7 @@ st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS)
                    "Group totals only.")
 st.sidebar.caption("Memory loss = \"confusion or memory loss that is happening more often or getting worse\" "
                    "in the past 12 months. Self-reported, not a diagnosis.")
-st.sidebar.caption("Memory tests page: CDC NHANES 2011-2014, people 60+ who did memory tests "
+st.sidebar.caption("Memory tests: CDC NHANES 2011-2014, people 60+ who did memory tests "
                    "(dementia screening tests, not a diagnosis).")
 st.sidebar.caption("Source: CDC BRFSS 2023-2024 and NHANES 2011-2014, free on cdc.gov. "
                    "Student project, not endorsed by CDC.")
@@ -144,11 +144,10 @@ if page == "Home":
                  f"matter more than age. Lowest income: **{low:.1f}%** have memory loss. Highest income: "
                  f"**{high:.1f}%**.")
 
-    st.write("**Click a topic to explore:**")
-    topics = [("Age", "Age"), ("Income", "Income"), ("Education", "Education"), ("Health", "Health"),
-              ("What predicts it?", "What predicts memory loss"), ("Memory tests", "Memory tests (NHANES)")]
-    for col, (label, target) in zip(st.columns(len(topics)), topics):
-        col.button(label, on_click=go, args=(target,), key=f"btn_{target}", width="stretch")
+    st.link_button("See the charts by age, income, education and health in the Tableau dashboard",
+                   "https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home",
+                   width="stretch")
+    st.write("**Try a tool:**")
     c1, c2 = st.columns(2)
     c1.button("Risk checker: which factors matter for a person like this?", on_click=go,
               args=("Risk checker",), key="btn_risk", width="stretch")
@@ -442,7 +441,7 @@ elif page == "Try the tests":
                     st.rerun()
 
     st.caption("In NHANES 2011-2014, people aged 60+ did these three tests. In this project, a low test score "
-               "means the bottom 25% of the combined score. See the Memory tests page.")
+               "means the bottom 25% of the combined score. See \"Said vs tested\" in the Tableau dashboard.")
 
 # ---- Expectations vs data: write down what you expect, then compare with the results ----
 elif page == "Expectations vs data":
