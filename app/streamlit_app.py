@@ -84,6 +84,7 @@ if "page" not in st.session_state:
     st.session_state.page = start if start in PAGES else "Home"
 # The presentation link (slide 7) adds ?from=slides; only then show a way back to the slides
 PRESENTATION = "https://claude.ai/artifact/2kk5xVQMzg1UFkf7Mq4Pdx#slide-7"
+TABLEAU = "https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home"
 if st.query_params.get("from") == "slides":
     st.session_state.from_slides = True
 
@@ -108,6 +109,7 @@ with st.sidebar:  # the moving brain from the first slide (decoration only)
     components.html((Path(__file__).parent / "brain.html").read_text(encoding="utf-8"), height=190)
 st.sidebar.title("Memory loss in people 45+")
 page =st.sidebar.radio("Choose a topic", PAGES, key="page")
+st.sidebar.link_button("Open the Tableau dashboard", TABLEAU, width="stretch")
 st.sidebar.markdown("---")
 st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS) 2023 and 2024, "
                    "Cognitive Decline module (36 states and Puerto Rico). Percentages use the survey weights. "
@@ -159,8 +161,7 @@ if page == "Home":
                  f"**{high:.1f}%**.")
 
     st.link_button("See the charts by age, income, education and health in the Tableau dashboard",
-                   "https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home",
-                   width="stretch")
+                   TABLEAU, width="stretch")
     st.write("**Try a tool:**")
     c1, c2 = st.columns(2)
     c1.button("Outreach planner: who should a health team reach first?", on_click=go, args=("Outreach planner",),
