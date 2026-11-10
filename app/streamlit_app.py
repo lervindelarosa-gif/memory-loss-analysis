@@ -527,11 +527,14 @@ elif page == "Outreach planner":
                  alt.Tooltip("Reached:Q", title="% reached", format=".1f")],
     ).properties(height=340)
     st.altair_chart(gain_chart, width="stretch")
-    st.caption("Tested on 52,043 people the model did not train on. Model score (ROC AUC): 0.71, fair.")
+    st.caption("Model: gradient boosting, which combines many small decision trees. I compared it with logistic "
+               "regression: it ranked people slightly better (ROC AUC 0.713 vs 0.704) and handles missing answers, "
+               "such as unknown income, without filling them in. Tested on 52,043 people it did not train on. "
+               "Model score (ROC AUC): 0.71, fair.")
 
     st.subheader("Plan your budget")
     a, b, c = st.columns(3)
-    members = a.number_input("People you could contact", 1000, 10_000_000, 100_000, step=1000)
+    members = a.number_input("Target group size (45+)", 1000, 10_000_000, 100_000, step=1000)
     budget = b.number_input("Budget ($)", 0, 100_000_000, 50_000, step=1000)
     cost = c.number_input("Cost per contact ($)", 0.5, 1000.0, 5.0, step=0.5)
     contacted = min(int(budget / cost), int(members))
