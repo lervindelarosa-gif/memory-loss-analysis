@@ -121,6 +121,9 @@ st.sidebar.caption("Source: CDC BRFSS 2023-2024 and NHANES 2011-2014, free on cd
 
 # ---- Home ----
 if page == "Home":
+    if st.session_state.get("from_slides"):
+        _, back = st.columns([5, 1.2])
+        back.link_button("Back to presentation", PRESENTATION, width="stretch")
     st.title("Is memory loss only about age?")
     st.markdown('<p class="subtitle">CDC BRFSS 2023 + 2024 &nbsp;|&nbsp; people aged 45+ in 36 states and Puerto Rico '
                 '&nbsp;|&nbsp; weighted survey results</p>', unsafe_allow_html=True)
