@@ -82,6 +82,10 @@ if "page" not in st.session_state:
     # A link like ?page=Try+the+tests opens that page directly (used by the QR codes on the slides)
     start = st.query_params.get("page", "Home")
     st.session_state.page = start if start in PAGES else "Home"
+# The presentation link (slide 7) adds ?from=slides; only then show a way back to the slides
+PRESENTATION = "https://claude.ai/artifact/2kk5xVQMzg1UFkf7Mq4Pdx#slide-7"
+if st.query_params.get("from") == "slides":
+    st.session_state.from_slides = True
 
 
 def go(target):
@@ -91,7 +95,11 @@ def go(target):
 
 def home_button():
     """Title row helper: a '← Home' button at the top right of every topic page."""
-    _, right = st.columns([5, 1])
+    if st.session_state.get("from_slides"):
+        _, back, right = st.columns([4, 1.2, 1])
+        back.link_button("Back to presentation", PRESENTATION, width="stretch")
+    else:
+        _, right = st.columns([5, 1])
     right.button("← Home", on_click=go, args=("Home",), key="home_btn", width="stretch")
 
 
