@@ -96,11 +96,7 @@ def go(target):
 
 def home_button():
     """Title row helper: a '← Home' button at the top right of every topic page."""
-    if st.session_state.get("from_slides"):
-        _, back, right = st.columns([4, 1.2, 1])
-        back.link_button("Back to presentation", PRESENTATION, width="stretch")
-    else:
-        _, right = st.columns([5, 1])
+    _, right = st.columns([5, 1])
     right.button("← Home", on_click=go, args=("Home",), key="home_btn", width="stretch")
 
 
@@ -110,6 +106,8 @@ with st.sidebar:  # the moving brain from the first slide (decoration only)
 st.sidebar.title("Memory loss in people 45+")
 page =st.sidebar.radio("Choose a topic", PAGES, key="page")
 st.sidebar.link_button("Open the Tableau dashboard", TABLEAU, width="stretch")
+if st.session_state.get("from_slides"):  # only when opened from the slides (the slides are private)
+    st.sidebar.link_button("Back to presentation", PRESENTATION, width="stretch")
 st.sidebar.markdown("---")
 st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS) 2023 and 2024, "
                    "Cognitive Decline module (36 states and Puerto Rico). Percentages use the survey weights. "
@@ -123,9 +121,6 @@ st.sidebar.caption("Source: CDC BRFSS 2023-2024 and NHANES 2011-2014, free on cd
 
 # ---- Home ----
 if page == "Home":
-    if st.session_state.get("from_slides"):
-        _, back = st.columns([5, 1.2])
-        back.link_button("Back to presentation", PRESENTATION, width="stretch")
     st.title("Is memory loss only about age?")
     st.markdown('<p class="subtitle">CDC BRFSS 2023 + 2024 &nbsp;|&nbsp; people aged 45+ in 36 states and Puerto Rico '
                 '&nbsp;|&nbsp; weighted survey results</p>', unsafe_allow_html=True)
