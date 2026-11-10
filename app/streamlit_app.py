@@ -77,7 +77,7 @@ div.stButton > button:focus:not(:active) { color: #FFFFFF; }
 """, unsafe_allow_html=True)
 
 # Charts by age, income, education and health now live in the Tableau dashboard; the app keeps the interactive tools
-PAGES = ["Home", "Try the tests", "Expectations vs data", "Outreach planner", "Risk checker"]
+PAGES = ["Home", "Outreach planner", "Try the tests", "Risk checker", "Expectations vs data"]
 if "page" not in st.session_state:
     # A link like ?page=Try+the+tests opens that page directly (used by the QR codes on the slides)
     start = st.query_params.get("page", "Home")
@@ -102,7 +102,7 @@ st.sidebar.title("Memory loss in people 45+")
 page =st.sidebar.radio("Choose a topic", PAGES, key="page")
 st.sidebar.markdown("---")
 st.sidebar.caption("Data: CDC Behavioral Risk Factor Surveillance System (BRFSS) 2023 and 2024, "
-                   "Cognitive Decline module (37 US states). Percentages use the survey weights. "
+                   "Cognitive Decline module (36 states and Puerto Rico). Percentages use the survey weights. "
                    "Group totals only.")
 st.sidebar.caption("Memory loss = \"confusion or memory loss that is happening more often or getting worse\" "
                    "in the past 12 months. Self-reported, not a diagnosis.")
@@ -114,7 +114,7 @@ st.sidebar.caption("Source: CDC BRFSS 2023-2024 and NHANES 2011-2014, free on cd
 # ---- Home ----
 if page == "Home":
     st.title("Is memory loss only about age?")
-    st.markdown('<p class="subtitle">CDC BRFSS 2023 + 2024 &nbsp;|&nbsp; people aged 45+ in 37 US states '
+    st.markdown('<p class="subtitle">CDC BRFSS 2023 + 2024 &nbsp;|&nbsp; people aged 45+ in 36 states and Puerto Rico '
                 '&nbsp;|&nbsp; weighted survey results</p>', unsafe_allow_html=True)
 
     # KPI tiles: 2 x 2, so the numbers are not cut off on small screens
@@ -152,15 +152,15 @@ if page == "Home":
                    width="stretch")
     st.write("**Try a tool:**")
     c1, c2 = st.columns(2)
-    c1.button("Risk checker: which factors matter for a person like this?", on_click=go,
-              args=("Risk checker",), key="btn_risk", width="stretch")
+    c1.button("Outreach planner: who should a health team reach first?", on_click=go, args=("Outreach planner",),
+              key="btn_outreach", width="stretch")
     c2.button("Try the NHANES-style memory tests yourself", on_click=go,
               args=("Try the tests",), key="btn_try", width="stretch")
     c3, c4 = st.columns(2)
-    c3.button("Expectations vs data: what did you expect?", on_click=go, args=("Expectations vs data",), key="btn_expect",
+    c3.button("Risk checker: which factors matter for a person like this?", on_click=go,
+              args=("Risk checker",), key="btn_risk", width="stretch")
+    c4.button("Expectations vs data: what did you expect?", on_click=go, args=("Expectations vs data",), key="btn_expect",
               width="stretch")
-    c4.button("Outreach planner: who should a health team reach first?", on_click=go, args=("Outreach planner",),
-              key="btn_outreach", width="stretch")
 
     st.caption('Memory loss here is self-reported ("confusion or memory loss happening more often or getting '
                'worse"), not a diagnosis. The charts show links, not causes. Percentages use the BRFSS survey '
@@ -555,7 +555,7 @@ elif page == "Outreach planner":
     st.caption(f"Assumes {base:.1%} of your people report memory loss, as in the survey (adults aged 45+). "
                "\"Reached\" means contacted, not helped: a pilot would be needed to measure real results.")
 
-    st.subheader("How big is each group?")
+    st.subheader("Estimated number of adults in each group (36 states + Puerto Rico)")
     table = biz_groups.rename(columns={"group": "Group", "est_adults": "Estimated adults",
                                        "memory_loss_pct": "% with memory loss",
                                        "est_with_memory_loss": "Estimated with memory loss",
@@ -565,7 +565,8 @@ elif page == "Outreach planner":
         "Estimated with memory loss": st.column_config.NumberColumn(format="localized"),
         "% with memory loss": st.column_config.NumberColumn(format="%.1f%%"),
         "% of all cases": st.column_config.NumberColumn(format="%.1f%%")})
-    st.caption("Rough estimates for one average year in the 37 surveyed states; groups overlap.")
+    st.caption("Survey answers scaled up to all adults aged 45+ in the 36 states and Puerto Rico that asked the memory "
+               "question, for one average year. Groups overlap, so don't add them up.")
     st.info("**Limits.** The model finds people who report memory loss now; it does not predict who will get it. It "
             "uses survey answers such as depression and hearing, which a real organisation may not have, so its "
             "results could be weaker. Links, not causes.")
