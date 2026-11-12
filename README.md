@@ -1,5 +1,11 @@
 # Is memory loss only about age?
 
+> **Business impact:** A targeting model that helps a public health team or health insurer decide **who to reach first**.
+> Contacting the 20% of people the model ranks highest reaches **44.8%** of everyone reporting memory loss, **twice** as many as going oldest-first (22.2%).
+> Tested on 52,043 people the model never saw · built on 208,171 CDC survey records · shared as a [Tableau dashboard](https://public.tableau.com/app/profile/lervin.de.la.rosa/viz/Ismemorylossonlyaboutage/Home) and an [11-page Streamlit app](https://memory-loss-analysis.streamlit.app/).
+>
+> *Stack: Python, pandas, weighted logistic regression, gradient boosting, Tableau, Streamlit · Solo capstone project*
+
 *What people say about their memory, and how they score on memory tests (CDC BRFSS and NHANES)*
 
 A data analytics final project in two parts, using two different CDC datasets:
