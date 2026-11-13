@@ -159,6 +159,58 @@ Full comparison: [reports/brfss_vs_nhanes.md](reports/brfss_vs_nhanes.md).
 
 ---
 
+## Model card: the outreach model
+
+A short summary of what the model is, how well it works and where it should not be used.
+
+| | |
+|---|---|
+| **What it does** | Ranks people aged 45+ by how likely they are to report memory loss getting worse |
+| **Intended use** | Helping a public health team or health insurer decide who to contact first for outreach |
+| **Not for** | Diagnosing anyone, judging one person, setting prices or refusing cover, or replacing memory testing |
+| **Model** | Gradient boosting (scikit-learn `HistGradientBoostingClassifier`, 300 trees, balanced classes). No trained model is shared |
+| **Training data** | CDC BRFSS 2023 + 2024, 208,171 people aged 45+ from 37 US states and territories. 75% to train, 25% to test (52,043 people) |
+| **Target** | Saying yes to "confusion or memory loss happening more often or getting worse" in the past 12 months. Self-reported, not a diagnosis |
+| **13 inputs** | Age, sex, education, income, depression, hearing problem, stroke, COPD, heart disease, diabetes, no exercise, current smoker, obesity |
+| **Missing values** | Kept as missing, which this model can handle. Income is unknown for 17% of people |
+
+**How well it works** (on the 52,043 test people)
+
+| Check | Result |
+|---|---|
+| ROC AUC, a score of how well it ranks people | 0.712 on test data (fair), 0.721 on training data |
+| Reporting memory loss, top 10% of scores vs bottom 10% | 45.6% vs 5.3% |
+| Share of cases reached by contacting 20% of people | Model 44.8%, oldest first 22.2%, random 20% |
+| Using only 8 inputs a health record might hold | 43.8% reached |
+
+**Different groups**
+
+| Group | ROC AUC |
+|---|---|
+| Ages 45-64 | 0.743 |
+| Ages 65+ | 0.680 |
+| Women | 0.711 |
+| Men | 0.713 |
+| Income under $25k | 0.729 |
+| Income $100k+ | 0.666 |
+
+**Second survey check** (NHANES 2011-2014, ages 60+, using the 11 inputs both surveys share)
+
+| Finding | Contacting 20%: model | Contacting 20%: oldest first |
+|---|---|---|
+| People who say they have memory problems | 41.3% | 30.4% |
+| People with a low memory test score | 31.8% | 42.5% |
+
+**Limits**
+- It finds people who report memory loss **now**. BRFSS asks different people each year, so it cannot predict future decline.
+- It was beaten by "oldest first" for low memory test scores, so it does not replace testing.
+- It was not tested on real health records, which could give weaker results.
+- It shows links, not causes.
+- It does not use race or ethnicity, and it was **not** tested for fairness across those groups. Leaving them out does not make a model fair, because other inputs such as income are linked to them.
+- The checks cover age, sex and income only. The NHANES inputs only roughly match BRFSS.
+
+---
+
 ## Data terms (checked on 4 November 2026)
 
 - **BRFSS national files:** no data use agreement on the [download page](https://www.cdc.gov/brfss/annual_data/annual_2023.html).

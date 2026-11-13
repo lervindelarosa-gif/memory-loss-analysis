@@ -1,38 +1,38 @@
-state_name,people,with_memory_loss,memory_loss_pct,pct_label,people_label,with_label
-Alabama,6030,1021,17.7,17.7% memory loss,"6,030 people","1,021 with memory loss"
-Alaska,3177,589,17.8,17.8% memory loss,"3,177 people",589 with memory loss
-Arkansas,2797,643,23.9,23.9% memory loss,"2,797 people",643 with memory loss
-Connecticut,5525,916,15.7,15.7% memory loss,"5,525 people",916 with memory loss
-Delaware,5420,748,14.1,14.1% memory loss,"5,420 people",748 with memory loss
-Florida,15629,2818,17.2,17.2% memory loss,"15,629 people","2,818 with memory loss"
-Georgia,4779,922,18.8,18.8% memory loss,"4,779 people",922 with memory loss
-Hawaii,5002,896,16.8,16.8% memory loss,"5,002 people",896 with memory loss
-Idaho,2298,412,15.7,15.7% memory loss,"2,298 people",412 with memory loss
-Illinois,2721,428,14.9,14.9% memory loss,"2,721 people",428 with memory loss
-Indiana,14018,2472,17.9,17.9% memory loss,"14,018 people","2,472 with memory loss"
-Louisiana,5898,1201,20.2,20.2% memory loss,"5,898 people","1,201 with memory loss"
-Maine,8044,1395,17.0,17.0% memory loss,"8,044 people","1,395 with memory loss"
-Minnesota,9462,1158,11.0,11.0% memory loss,"9,462 people","1,158 with memory loss"
-Mississippi,2265,431,19.8,19.8% memory loss,"2,265 people",431 with memory loss
-Missouri,8355,1515,17.5,17.5% memory loss,"8,355 people","1,515 with memory loss"
-Montana,4755,931,19.5,19.5% memory loss,"4,755 people",931 with memory loss
-Nevada,1546,315,22.1,22.1% memory loss,"1,546 people",315 with memory loss
-New Hampshire,1244,146,11.2,11.2% memory loss,"1,244 people",146 with memory loss
-New Jersey,5237,785,15.0,15.0% memory loss,"5,237 people",785 with memory loss
-New Mexico,2040,404,20.2,20.2% memory loss,"2,040 people",404 with memory loss
-North Carolina,2206,287,12.7,12.7% memory loss,"2,206 people",287 with memory loss
-North Dakota,3504,525,15.5,15.5% memory loss,"3,504 people",525 with memory loss
-Oregon,6748,1245,19.0,19.0% memory loss,"6,748 people","1,245 with memory loss"
-Pennsylvania,1670,282,16.1,16.1% memory loss,"1,670 people",282 with memory loss
-Puerto Rico,5687,604,10.7,10.7% memory loss,"5,687 people",604 with memory loss
-Rhode Island,3669,602,16.3,16.3% memory loss,"3,669 people",602 with memory loss
-South Dakota,3780,597,17.5,17.5% memory loss,"3,780 people",597 with memory loss
-Tennessee,3211,683,21.0,21.0% memory loss,"3,211 people",683 with memory loss
-Texas,11195,1943,16.3,16.3% memory loss,"11,195 people","1,943 with memory loss"
-Utah,6867,1227,15.6,15.6% memory loss,"6,867 people","1,227 with memory loss"
-Vermont,4261,674,15.7,15.7% memory loss,"4,261 people",674 with memory loss
-Virginia,3817,645,16.3,16.3% memory loss,"3,817 people",645 with memory loss
-Washington,16476,2918,17.0,17.0% memory loss,"16,476 people","2,918 with memory loss"
-West Virginia,3997,728,19.0,19.0% memory loss,"3,997 people",728 with memory loss
-Wisconsin,8619,1127,13.3,13.3% memory loss,"8,619 people","1,127 with memory loss"
-Wyoming,6222,954,15.1,15.1% memory loss,"6,222 people",954 with memory loss
+state_name,people,with_memory_loss,memory_loss_pct,age_adjusted_pct,expected_pct,low_income_pct,depression_pct,hearing_pct,vs_expected,pct_label,people_label,with_label
+Alabama,6030,1021,17.7,17.7,18.4,16.5,21.0,13.8,-0.7,17.7% memory loss,"6,030 people","1,021 with memory loss"
+Alaska,3177,589,17.8,18.4,15.9,12.2,17.5,14.6,1.9,17.8% memory loss,"3,177 people",589 with memory loss
+Arkansas,2797,643,23.9,24.0,19.1,23.4,20.2,16.2,4.8,23.9% memory loss,"2,797 people",643 with memory loss
+Connecticut,5525,916,15.7,15.7,14.4,9.7,15.8,7.2,1.3,15.7% memory loss,"5,525 people",916 with memory loss
+Delaware,5420,748,14.1,14.1,16.2,12.7,19.0,8.6,-2.1,14.1% memory loss,"5,420 people",748 with memory loss
+Florida,15629,2818,17.2,17.1,16.0,15.9,16.3,10.2,1.2,17.2% memory loss,"15,629 people","2,818 with memory loss"
+Georgia,4779,922,18.8,18.9,15.9,17.1,15.5,9.7,2.9,18.8% memory loss,"4,779 people",922 with memory loss
+Hawaii,5002,896,16.8,16.6,14.2,10.6,12.5,10.3,2.6,16.8% memory loss,"5,002 people",896 with memory loss
+Idaho,2298,412,15.7,15.7,16.0,13.7,17.7,14.4,-0.3,15.7% memory loss,"2,298 people",412 with memory loss
+Illinois,2721,428,14.9,14.9,15.1,14.0,15.5,7.8,-0.2,14.9% memory loss,"2,721 people",428 with memory loss
+Indiana,14018,2472,17.9,17.9,17.8,16.3,21.2,12.0,0.1,17.9% memory loss,"14,018 people","2,472 with memory loss"
+Louisiana,5898,1201,20.2,20.2,18.8,19.6,22.7,13.3,1.4,20.2% memory loss,"5,898 people","1,201 with memory loss"
+Maine,8044,1395,17.0,16.9,17.6,15.5,21.7,11.6,-0.6,17.0% memory loss,"8,044 people","1,395 with memory loss"
+Minnesota,9462,1158,11.0,11.0,15.9,10.6,19.9,10.3,-4.9,11.0% memory loss,"9,462 people","1,158 with memory loss"
+Mississippi,2265,431,19.8,19.8,17.8,20.6,16.6,13.7,2.0,19.8% memory loss,"2,265 people",431 with memory loss
+Missouri,8355,1515,17.5,17.4,17.9,14.8,20.4,14.4,-0.4,17.5% memory loss,"8,355 people","1,515 with memory loss"
+Montana,4755,931,19.5,19.4,17.0,13.1,21.0,14.3,2.5,19.5% memory loss,"4,755 people",931 with memory loss
+Nevada,1546,315,22.1,22.1,16.2,12.6,17.8,12.3,5.9,22.1% memory loss,"1,546 people",315 with memory loss
+New Hampshire,1244,146,11.2,11.5,14.7,8.2,17.9,9.2,-3.5,11.2% memory loss,"1,244 people",146 with memory loss
+New Jersey,5237,785,15.0,15.1,13.7,11.2,12.1,7.3,1.3,15.0% memory loss,"5,237 people",785 with memory loss
+New Mexico,2040,404,20.2,20.3,17.2,18.2,20.8,12.6,3.0,20.2% memory loss,"2,040 people",404 with memory loss
+North Carolina,2206,287,12.7,12.7,16.8,12.4,21.1,12.7,-4.1,12.7% memory loss,"2,206 people",287 with memory loss
+North Dakota,3504,525,15.5,15.3,15.9,10.0,17.4,13.6,-0.4,15.5% memory loss,"3,504 people",525 with memory loss
+Oregon,6748,1245,19.0,18.9,17.0,13.0,22.4,11.5,2.0,19.0% memory loss,"6,748 people","1,245 with memory loss"
+Pennsylvania,1670,282,16.1,16.1,16.6,15.2,18.9,10.3,-0.5,16.1% memory loss,"1,670 people",282 with memory loss
+Puerto Rico,5687,604,10.7,10.8,20.1,62.2,20.8,12.9,-9.4,10.7% memory loss,"5,687 people",604 with memory loss
+Rhode Island,3669,602,16.3,16.2,16.2,14.5,19.0,10.1,0.1,16.3% memory loss,"3,669 people",602 with memory loss
+South Dakota,3780,597,17.5,17.4,16.7,14.0,18.8,12.2,0.8,17.5% memory loss,"3,780 people",597 with memory loss
+Tennessee,3211,683,21.0,21.0,19.7,20.8,25.2,13.0,1.3,21.0% memory loss,"3,211 people",683 with memory loss
+Texas,11195,1943,16.3,16.5,16.6,19.8,19.0,10.0,-0.3,16.3% memory loss,"11,195 people","1,943 with memory loss"
+Utah,6867,1227,15.6,15.9,15.0,6.2,18.4,10.8,0.6,15.6% memory loss,"6,867 people","1,227 with memory loss"
+Vermont,4261,674,15.7,15.6,16.1,10.3,22.4,9.5,-0.4,15.7% memory loss,"4,261 people",674 with memory loss
+Virginia,3817,645,16.3,16.2,16.1,12.3,19.2,9.5,0.2,16.3% memory loss,"3,817 people",645 with memory loss
+Washington,16476,2918,17.0,17.0,15.5,10.9,20.6,10.5,1.5,17.0% memory loss,"16,476 people","2,918 with memory loss"
+West Virginia,3997,728,19.0,19.2,20.2,18.6,24.9,14.5,-1.2,19.0% memory loss,"3,997 people",728 with memory loss
+Wisconsin,8619,1127,13.3,13.3,16.6,13.2,19.7,10.4,-3.3,13.3% memory loss,"8,619 people","1,127 with memory loss"
+Wyoming,6222,954,15.1,15.1,16.6,12.4,18.4,13.2,-1.5,15.1% memory loss,"6,222 people",954 with memory loss

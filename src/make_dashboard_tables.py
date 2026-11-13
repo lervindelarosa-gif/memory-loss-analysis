@@ -67,6 +67,40 @@ tables = {
     "dash_health.csv": health,
     "dash_model.csv": pd.read_csv(OUT / "ml_importance.csv"),
 }
+# Age-adjusted state rates: each state's age-group rates, combined using the age mix of all people in the survey
+age_mix = df.groupby("age_group")["weight"].sum() / df["weight"].sum()
+by_state_age = df.assign(state_name=df["state"].map(STATES), cases=df["memory_loss"] * df["weight"]).groupby(
+    ["state_name", "age_group"])[["cases", "weight"]].sum()
+state_rates = (by_state_age["cases"] / by_state_age["weight"]).unstack("age_group")
+adjusted = 100 * (state_rates * age_mix).sum(axis=1) / state_rates.notna().mul(age_mix).sum(axis=1)
+tables["dash_state.csv"]["age_adjusted_pct"] = tables["dash_state.csv"]["state_name"].map(adjusted).round(1)
+
+# Patterns by state, and how much memory loss each state would have from its people's patterns alone.
+# Expected = weighted logistic regression on age group, sex, education, income and 9 health factors (no state).
+from sklearn.linear_model import LogisticRegression  # noqa: E402
+
+HEALTH = ["stroke", "diabetes", "heart_disease", "copd", "depression", "no_exercise", "current_smoker", "obese", "deaf"]
+X = pd.get_dummies(df[["age_group", "education", "income"]].fillna("Unknown"), drop_first=True).astype(float)
+X["female"] = df["female"]
+for c in HEALTH:
+    X[c] = df[c].fillna(0)
+    X[c + "_unknown"] = df[c].isna().astype(float)
+lr = LogisticRegression(C=1e6, max_iter=3000).fit(X, df["memory_loss"], sample_weight=df["weight"])
+pat = df.assign(state_name=df["state"].map(STATES), expected=lr.predict_proba(X)[:, 1],
+                low_income=df["income"].isin(["1 Under $15k", "2 $15-25k"]).astype(float).where(df["income"].notna()))
+
+
+def wpct(g, col):
+    m = g[col].notna()
+    return 100 * (g.loc[m, col] * g.loc[m, "weight"]).sum() / g.loc[m, "weight"].sum()
+
+
+st_tab = tables["dash_state.csv"]
+for col, name in [("expected", "expected_pct"), ("low_income", "low_income_pct"),
+                  ("depression", "depression_pct"), ("deaf", "hearing_pct")]:
+    st_tab[name] = st_tab["state_name"].map(pat.groupby("state_name").apply(wpct, col, include_groups=False)).round(1)
+st_tab["vs_expected"] = (st_tab["memory_loss_pct"] - st_tab["expected_pct"]).round(1)
+
 for name, t in tables.items():
     if "memory_loss_pct" in t:  # text labels with words, so Tableau keeps them as text (no number formatting)
         t["pct_label"] = t["memory_loss_pct"].map("{:.1f}% memory loss".format)
